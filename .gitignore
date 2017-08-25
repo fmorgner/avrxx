@@ -1,0 +1,7 @@
+# Generated folders
+bin
+hex
+obj
+
+# Generated files
+.tool-paths
