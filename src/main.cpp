@@ -2,5 +2,5 @@
 
 int main()
   {
-  avr::sleep::enter<avr::sleep::mode::idle>();
+  avr::sleep::select_enter<avr::sleep::mode::idle>();
   }
