@@ -54,7 +54,7 @@ DEPS := $(patsubst %.o,%.d,$(OBJS))
 BINS := $(BINDIR)/$(TARGET).bin
 HEXS := $(HEXDIR)/$(TARGET).hex
 
-.PHONY: clean
+.PHONY: clean doc
 .SECONDARY: $(OBJS) $(BINS)
 
 #-# General Goals
@@ -66,6 +66,7 @@ clean:
 	@$(foreach elem,$(DEPS),if [ -f $(elem) ]; then echo "RM $(elem)"; rm $(elem); fi)
 	@$(foreach elem,$(BINS),if [ -f $(elem) ]; then echo "RM $(elem)"; rm $(elem); fi)
 	@$(foreach elem,$(HEXS),if [ -f $(elem) ]; then echo "RM $(elem)"; rm $(elem); fi)
+	@$(MAKE) -C doc clean
 
 dist-clean: clean
 	@if [ -d $(OBJDIR) ]; then echo "RMDIR $(OBJDIR)"; rmdir $(OBJDIR); fi
@@ -73,6 +74,11 @@ dist-clean: clean
 	@if [ -d $(HEXDIR) ]; then echo "RMDIR $(HEXDIR)"; rmdir $(HEXDIR); fi
 	@if [ -f .tool-paths ]; then echo "RM .tool-paths"; rm .tool-paths; fi
 	@if [ -d .git -a -n "$(shell git clean -xdn)" ]; then echo "GIT CLEAN"; git clean -xdf &> /dev/null; fi
+
+#-# Documentation Goals
+
+doc:
+	@$(MAKE) -C doc html
 
 #-# AVR Info Goals
 
