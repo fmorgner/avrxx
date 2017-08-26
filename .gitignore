@@ -9,3 +9,6 @@ doc/xml
 
 # Generated files
 .tool-paths
+
+# Python Precompiled Files
+*.pyc
