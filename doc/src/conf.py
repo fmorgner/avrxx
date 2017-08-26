@@ -50,7 +50,7 @@ man_pages = [
         3
     ),
     (
-        'internal/register/index',
+        'internal/registers/index',
         'avr::internal::registers',
         'AVR Special Function Register Infrastructure',
         [author],

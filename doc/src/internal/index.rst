@@ -8,4 +8,4 @@ and is mainly of interest to core library developers:
 .. toctree::
   :maxdepth: 2
 
-  register/index
+  registers/index
