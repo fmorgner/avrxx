@@ -84,7 +84,7 @@ doc:
 
 disasm: $(BINS)
 	@echo "DISASM $^"
-	@$(OBJDUMP) -d -S $^
+	@$(OBJDUMP) -d $^
 
 size: binsize hexsize
 
