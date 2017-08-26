@@ -138,10 +138,10 @@ namespace avr::internal::registers
    * This class provides access to the I/O register of an AVR microcontroller. It ensures that only addresses within the I/O
    * address space of the device are used as I/O registers.
    */
-  template<size_t Bits, ptrdiff_t Address>
-  struct io_register : special_function_register<Bits, Address, 0x20>
+  template<ptrdiff_t Address, size_t Bits>
+  struct io_register : special_function_register<Address, 0x20, Bits>
     {
-    using special_function_register<Bits, Address, 0x20>::address;
+    using special_function_register<Address, 0x20, Bits>::address;
 
     static_assert(atl::meta::in_range(address, 0x20, 0x5f), "Address is not in I/O register range");
     };
@@ -150,7 +150,7 @@ namespace avr::internal::registers
    * @brief A convenience variable template to access 8-bit I/O registers
    */
   template<ptrdiff_t Address>
-  auto constexpr io_register_8 = io_register<8, Address>{};
+  auto constexpr io_register_8 = io_register<Address, 8>{};
   }
 
 #endif
