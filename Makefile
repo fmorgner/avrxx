@@ -100,7 +100,7 @@ hexsize: $(HEXS)
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.cpp | $(OBJDIR)
 	@echo "COMPILE $@"
-	@$(COMPILE) $(CXXFLAGS) -MMD -c -o $@ $<
+	@$(COMPILE) $(CXXFLAGS) -MMD -MP -c -o $@ $<
 
 -include $(OBJDIR)/*.d
 
