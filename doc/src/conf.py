@@ -42,8 +42,20 @@ todo_include_todos = True
 htmlhelp_basename = 'AVR++doc'
 
 man_pages = [
-    (master_doc, 'AVR++', 'AVR++ Documentation',
-     [author], 1)
+    (
+        'public/sleep/index',
+        'avr::sleep',
+        'AVR Power Saving Sleep Modes',
+        [author],
+        3
+    ),
+    (
+        'internal/register/index',
+        'avr::internal::registers',
+        'AVR Special Function Register Infrastructure',
+        [author],
+        3
+    ),
 ]
 
 primary_domain = 'cpp'

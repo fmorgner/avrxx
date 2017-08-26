@@ -80,6 +80,9 @@ dist-clean: clean
 doc:
 	@$(MAKE) -C doc html
 
+man:
+	@$(MAKE) -C doc man
+
 #-# AVR Info Goals
 
 disasm: $(BINS)
