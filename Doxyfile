@@ -1,6 +1,6 @@
 DOXYFILE_ENCODING      = UTF-8
 QUIET                  = YES
-PROJECT_NAME           = extfs
+PROJECT_NAME           = avr-wrapper
 PROJECT_NUMBER         = 1.0.0
 PROJECT_BRIEF          = "A C++ 17 wrapper library for AVR microcontrollers"
 OUTPUT_DIRECTORY       = doc
@@ -30,10 +30,8 @@ XML_OUTPUT             = xml
 XML_PROGRAMLISTING     = YES
 ENABLE_PREPROCESSING   = YES
 MACRO_EXPANSION        = YES
-PREDEFINED             =
 ALIASES                += "rst=@verbatim embed:rst:leading-asterisk"
 ALIASES                += "endrst=@endverbatim"
 HIDE_SCOPE_NAMES       = YES
 EXTRACT_PRIVATE        = NO
-QUIET                  = YES
 TAGFILES               += "doc/cppreference.tag.xml=http://en.cppreference.com/w/"

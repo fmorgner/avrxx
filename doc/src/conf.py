@@ -1,5 +1,4 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+# pylint: disable=missing-docstring,invalid-name,redefined-builtin
 
 import os
 import subprocess
@@ -18,6 +17,7 @@ breathe_projects = {
 }
 breathe_default_project = 'avr-wrapper'
 
+highlight_language = 'c++'
 
 source_suffix = '.rst'
 master_doc = 'index'
@@ -36,8 +36,6 @@ exclude_patterns = [
     'Thumbs.db',
     '.DS_Store',
 ]
-
-pygments_style = 'sphinx'
 
 todo_include_todos = True
 

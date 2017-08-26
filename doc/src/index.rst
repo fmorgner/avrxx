@@ -1,11 +1,19 @@
+#######################################
 Welcome to AVR-wrapper's documentation!
-=======================================
+#######################################
 
-
-User documentation
-------------------
+Public API
+==========
 
 .. toctree::
   :maxdepth: 2
 
-  sleep/index
+  public/index
+
+Library Internals
+=================
+
+.. toctree::
+  :maxdepth: 2
+
+  internal/index
