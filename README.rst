@@ -2,6 +2,14 @@
 AVR++
 #####
 
+.. image:: https://api.bintray.com/packages/fmorgner/conan-fmorgner/AVR%2B%2B%3Afmorgner/images/download.svg
+   :target: https://bintray.com/fmorgner/conan-fmorgner/AVR%2B%2B%3Afmorgner/_latestVersion)
+   :alt: Conan Package
+
+.. image:: https://readthedocs.org/projects/avrxx/badge/?version=latest
+   :target: http://avrxx.readthedocs.io/en/latest/?badge=latest
+   :alt: Documentation Status
+
 **AVR++** is a C++17 interface to Atmel AVR 8-bit microcontrollers. The goal of
 AVR++ is to provide a safe, clean, and zero-overhead interface to work with with
 AVR microcontrollers while still allowing for great flexibility and
