@@ -137,6 +137,9 @@ namespace avr::internal::registers
    *
    * This class provides access to the I/O register of an AVR microcontroller. It ensures that only addresses within the I/O
    * address space of the device are used as I/O registers.
+   *
+   * @tparam Address The register's address in memory
+   * @tparam Bits The size of register in bits
    */
   template<ptrdiff_t Address, size_t Bits>
   struct io_register : special_function_register<Address, 0x20, Bits>
@@ -148,6 +151,8 @@ namespace avr::internal::registers
 
   /**
    * @brief A convenience variable template to access 8-bit I/O registers
+   *
+   * @tparam Address The register address in memory
    */
   template<ptrdiff_t Address>
   auto constexpr io_register_8 = io_register<Address, 8>{};
