@@ -1,6 +1,6 @@
 DOXYFILE_ENCODING      = UTF-8
 QUIET                  = YES
-PROJECT_NAME           = avr-wrapper
+PROJECT_NAME           = AVR++
 PROJECT_NUMBER         = 1.0.0
 PROJECT_BRIEF          = "A C++ 17 wrapper library for AVR microcontrollers"
 OUTPUT_DIRECTORY       = doc

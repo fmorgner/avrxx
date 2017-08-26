@@ -13,16 +13,16 @@ extensions = [
 ]
 
 breathe_projects = {
-    'avr-wrapper': os.path.abspath('../xml'),
+    'AVR++': os.path.abspath('../xml'),
 }
-breathe_default_project = 'avr-wrapper'
+breathe_default_project = 'AVR++'
 
 highlight_language = 'c++'
 
 source_suffix = '.rst'
 master_doc = 'index'
 
-project = 'avr-wrapper'
+project = 'AVR++'
 copyright = '2017, Felix Morgner'
 author = 'Felix Morgner'
 
@@ -39,10 +39,10 @@ exclude_patterns = [
 
 todo_include_todos = True
 
-htmlhelp_basename = 'avr-wrapperdoc'
+htmlhelp_basename = 'AVR++doc'
 
 man_pages = [
-    (master_doc, 'avr-wrapper', 'avr-wrapper Documentation',
+    (master_doc, 'AVR++', 'AVR++ Documentation',
      [author], 1)
 ]
 
