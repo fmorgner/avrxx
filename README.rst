@@ -10,6 +10,10 @@ AVR++
    :target: http://avrxx.readthedocs.io/en/latest/?badge=latest
    :alt: Documentation Status
 
+.. image:: https://img.shields.io/badge/C%2B%2B-17-green.svg
+   :target: https://github.com/cplusplus/draft/tree/c++17
+   :alt: C++17
+
 **AVR++** is a C++17 interface to Atmel AVR 8-bit microcontrollers. The goal of
 AVR++ is to provide a safe, clean, and zero-overhead interface to work with with
 AVR microcontrollers while still allowing for great flexibility and
