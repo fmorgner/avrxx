@@ -94,6 +94,25 @@ namespace atl::meta
   using remove_const_t = typename remove_const<Type>::type;
 
   /**
+   * @brief Check if two types are the same
+   *
+   * Two types are considered the same, if they name the same type with identical cv-qualification
+   */
+  template<typename LhsType, typename RhsType>
+  struct is_same : false_type { };
+
+  template<typename Type>
+  struct is_same<Type, Type> : true_type { };
+
+  /**
+   * @brief Convenience variable template to check if two types are the same
+   *
+   * @see #is_same
+   */
+  template<typename LhsType, typename RhsType>
+  auto constexpr is_same_v = is_same<LhsType, RhsType>::value;
+
+  /**
    * @brief Check if a given value is in a speific range
    *
    * @param value The value to check
