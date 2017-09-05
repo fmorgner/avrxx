@@ -29,6 +29,52 @@ namespace atl::meta
   using enable_if_t = typename enable_if<Condition, EnabledType>::type;
 
   /**
+   * @brief Wrap a constant of integral type
+   *
+   * @tparam Type The type of the value
+   * @tparam Value The wrapped value
+   */
+  template<typename Type, Type Value>
+  struct integral_constant
+    {
+    /**
+     * @brief The type of the wrapped value
+     */
+    using value_type = Type;
+
+    /**
+     * @brief The wrapped value
+     */
+    static value_type constexpr value{Value};
+
+    /**
+     * @brief Access the wrapped value
+     */
+    constexpr value_type operator()() const { return value; }
+
+    /**
+     * @brief Convert the instance into the wrapped value
+     */
+    constexpr operator value_type() const { return (*this)(); }
+    };
+
+  /**
+   * @brief Convenience variable template for accessing #integral_constant values
+   */
+  template<typename Type, Type Value>
+  auto constexpr integral_constant_v = integral_constant<Type, Value>::value;
+
+  /**
+   * @brief Convenience alias for an #integral_constant containing false
+   */
+  using false_type = integral_constant<bool, false>;
+
+  /**
+   * @brief Convenience alias for an #integral_constant containing true
+   */
+  using true_type = integral_constant<bool, true>;
+
+  /**
    * @brief Remove top-level qualification from a type
    *
    * @tparam Type The type to remove the const from
