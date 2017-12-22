@@ -165,7 +165,7 @@ namespace avr::internal::registers
   class rw_special_function_register : public special_function_register<Address, Base, Bits, ValidBits>
     {
     protected:
-      template<uint16_t BitIndex>
+      template<decltype(ValidBits) BitIndex>
       using bit = rw_bit<rw_special_function_register, BitIndex>;
 
       using special_function_register<Address, Base, Bits, ValidBits>::reg;
@@ -196,7 +196,7 @@ namespace avr::internal::registers
                   "Address is not in I/O register range");
 
     protected:
-      template<uint16_t BitIndex>
+      template<decltype(ValidBits) BitIndex>
       using bit = ro_bit<ro_special_function_register, BitIndex>;
     };
 
@@ -238,7 +238,7 @@ namespace avr::internal::registers
   template<atl::ptrdiff_t Address, atl::int_types::uint_for_size_t<8> ValidBits>
   struct pin_register : ro_io_register<Address, 8, ValidBits>
     {
-    template<uint8_t PinNumber>
+    template<decltype(ValidBits) PinNumber>
     using pin = typename ro_io_register<Address, 8, ValidBits>::template bit<PinNumber>;
     };
 
@@ -254,7 +254,7 @@ namespace avr::internal::registers
   template<atl::ptrdiff_t Address, atl::int_types::uint_for_size_t<8> ValidBits>
   struct ddr_register : rw_io_register<Address, 8, ValidBits>
     {
-    template<uint8_t DDRNumber>
+    template<decltype(ValidBits) DDRNumber>
     using ddr = typename rw_io_register<Address, 8, ValidBits>::template bit<DDRNumber>;
     };
 
@@ -270,7 +270,7 @@ namespace avr::internal::registers
   template<atl::ptrdiff_t Address, atl::int_types::uint_for_size_t<8> ValidBits>
   struct port_register : rw_io_register<Address, 8, ValidBits>
     {
-    template<uint8_t PortNumber>
+    template<decltype(ValidBits) PortNumber>
     using port = typename rw_io_register<Address, 8, ValidBits>::template bit<PortNumber>;
     };
   }
