@@ -1,23 +1,13 @@
-#include "avr/internal/registers.hpp"
-
-struct some_device
-  {
-  struct gpio_ports
-    {
-    static auto constexpr B = avr::internal::registers::io_register_8<0x03>;
-    };
-  };
+#include <avr/controller.hpp>
 
 int main()
   {
-  auto constexpr & portB = some_device::gpio_ports::B;
-
-  if(portB.bit<3>.get())
+  if(avr::mcu::portb::port<3>::get())
     {
-    portB.bit<7>.set();
+    avr::mcu::portb::port<7>::set();
     }
   else
     {
-    portB.bit<7>.clear();
+    avr::mcu::portb::port<7>::get();
     }
   }
