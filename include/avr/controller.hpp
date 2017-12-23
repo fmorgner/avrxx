@@ -3,7 +3,9 @@
 
 /**
  * @file
- * @brief This file provides a type alias
+ * @brief This file provides a type alias <code>atl::mcu</code> that maps to the correct underlying implementation
+ *
+ * @since 1.0.0
  */
 
 #ifndef __AVR_DEVICE_NAME__
@@ -12,8 +14,16 @@
 
 #if defined(__AVR_ATmega328P__)
 #include "avr/internal/controllers/mega328p.h"
-#elif defined(DOXYGEN)
-namespace avr { using mcu = internal_mcu_type; }
+#elif defined(__DOXYGEN__)
+namespace avr
+  {
+  /**
+   * @brief The selected MCU type
+   *
+   * @since 1.0.0
+   */
+  using mcu = internal_mcu_type;
+  }
 #else
 #error "Unsupported AVR device"
 #endif

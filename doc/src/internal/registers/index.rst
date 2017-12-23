@@ -16,19 +16,27 @@ chapter to access a Special Function Register on an AVR microcontroller::
  
   #include "avr/internal/registers.hpp"
 
-  struct some_device {
-    struct gpio_ports {
-      static auto constexpr B = avr::internal::registers::io_register_8<0x03>;
-    };
+  struct mega328p {
+    ~mega328p() = delete;
+
+    using pinb = registers::pin_register<0x23, 0b11111111>;
+    using ddrb = registers::ddr_register<0x24, 0b11111111>;
+    using portb = registers::port_register<0x25, 0b11111111>;
+
+    using pinc = registers::pin_register<0x26, 0b01111111>;
+    using ddrc = registers::ddr_register<0x27, 0b01111111>;
+    using portc = registers::port_register<0x28, 0b01111111>;
+
+    using pind = registers::pin_register<0x29, 0b11111111>;
+    using ddrd = registers::ddr_register<0x2a, 0b11111111>;
+    using portd = registers::port_register<0x2b, 0b11111111>;
   };
 
   int main() {
-    auto constexpr & portB = some_device::gpio_ports::B;
-
-    if(portB.bit<3>.get()) {
-      portB.bit<7>.set();
+    if(mega328p::portb::port<3>::get()) {
+      mega328p::portb::port<7>::set();
     } else {
-      portB.bit<7>.clear();
+      mega328p::portb::port<7>::clear();
     }
   }
 
@@ -56,18 +64,25 @@ Base Type
 Full Register Access
 --------------------
 
-.. doxygenfunction:: avr::internal::registers::special_function_register::set
 .. doxygenfunction:: avr::internal::registers::special_function_register::get
+
+.. doxygenfunction:: avr::internal::registers::rw_special_function_register::set
 
 Bitwise Register Access
 -----------------------
 
-.. doxygenvariable:: avr::internal::registers::special_function_register::bit
-.. doxygenstruct:: avr::internal::registers::special_function_register::bit_wrapper
+.. doxygentypedef:: avr::internal::registers::rw_special_function_register::bit
+.. doxygentypedef:: avr::internal::registers::ro_special_function_register::bit
+
+.. doxygenstruct:: avr::internal::registers::bit
+  :members:
+
+.. doxygenstruct:: avr::internal::registers::rw_bit
   :members:
 
 Specialized Types and Aliases
 =============================
 
-.. doxygenstruct:: avr::internal::registers::io_register
-.. doxygenvariable:: avr::internal::registers::io_register_8
+.. doxygenstruct:: avr::internal::registers::pin_register
+.. doxygenstruct:: avr::internal::registers::ddr_register
+.. doxygenstruct:: avr::internal::registers::port_register

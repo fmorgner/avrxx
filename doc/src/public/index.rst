@@ -1,10 +1,23 @@
+##########
 Public API
-==========
+##########
 
-This part of the documentation describes the user-facing public API of
-AVR-wrapper:
+This part of the documentation describes the user-facing public API of AVR++ and
+the ATL.
+
+AVR API
+=======
 
 .. toctree::
   :maxdepth: 2
 
-  sleep/index
+  avr/sleep/index
+
+ATL API
+=======
+
+.. toctree::
+   :maxdepth: 2
+
+   atl/string/index
+   atl/int_types/index

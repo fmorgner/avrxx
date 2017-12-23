@@ -6,12 +6,27 @@
 #include "atl/cstddef.hpp"
 
 /**
+ * @file
  * @internal
  * @brief The <i>Special Function Register</i> infrastructure
+ *
+ * @since 1.0.0
  */
+
 namespace avr::internal::registers
   {
 
+  /**
+   * @brief The base class for all specialized safe bit wrappers
+   *
+   * This class provides safe access to a bit in a given register. It ensures that the bit index is valid and causes a compile
+   * error otherwise.
+   *
+   * @tparam Register The register this bit is a part of
+   * @tparam Index The index of this bit in its parent register
+   *
+   * @since 1.0.0
+   */
   template<typename Register, atl::int_types::uint_for_size_t<8> Index>
   struct bit
     {
@@ -42,7 +57,12 @@ namespace avr::internal::registers
    * This class provides bounds safe access to single bits in a register. It also provides functions to set, clear, get, and
    * toggle the selected bit. If an bit index outside of the registers range is selected, compilation will fail.
    *
+   * @see avr::internal::registers::bit
+   *
+   * @tparam Register The register this bit is a part of
    * @tparam Index The 0-based index of the bit inside the register.
+   *
+   * @since 1.0.0
    */
   template<typename Register, atl::int_types::uint_for_size_t<8> Index>
   struct rw_bit : bit<Register, Index>
@@ -78,7 +98,12 @@ namespace avr::internal::registers
    * This class provides bounds safe access to single bits in a register. It also provides a function to get the selected bit.
    * If an bit index outside of the registers range is selected, compilation will fail.
    *
+   * @see avr::internal::registers::bit
+   *
+   * @tparam Register The register this bit is a part of
    * @tparam Index The 0-based index of the bit inside the register.
+   *
+   * @since 1.0.0
    */
   template<typename Register, atl::int_types::uint_for_size_t<8> Index>
   struct ro_bit : bit<Register, Index> { };
@@ -94,6 +119,9 @@ namespace avr::internal::registers
    * @tparam Base The address base of the register
    * @tparam Bits The register's size in Bits
    * @tparam ValidBits The available bits in the register
+   * @tparam EffectiveAddress The actual address of the register in memory space
+   *
+   * @since 1.0.0
    */
   template<atl::ptrdiff_t Address,
            atl::ptrdiff_t Base,
@@ -124,8 +152,22 @@ namespace avr::internal::registers
     friend struct ro_bit;
 
     protected:
+      /**
+       * @internal
+       * The effective register address in memory space
+       */
       static auto constexpr address = EffectiveAddress;
+
+      /**
+       * @internal
+       * The bitwidth of this register
+       */
       static auto constexpr bits = Bits;
+
+      /**
+       * @internal
+       * A bitmap describing the accessible bits of this register
+       */
       static auto constexpr validBits = ValidBits;
 
       /**
@@ -150,7 +192,7 @@ namespace avr::internal::registers
        *
        * This function enables the retrieval of the full contents of the underlying register.
        *
-       * @see #set()
+       * @see atl::internal::registers::rw_special_function_register::set
        */
       static auto constexpr get()
         {
@@ -158,6 +200,20 @@ namespace avr::internal::registers
         }
     };
 
+  /**
+   * @brief A safe wrapper for writable AVR <b>Special Function Registers</b>
+   *
+   * This class provides a safe and zero-cost abstraction for the Spcial Purpose Registers found in AVR microcontrollers. All
+   * accesses to a register as well as its bits are bound checked, and violations of these bounds will cause compilation to
+   * fail.
+   *
+   * @tparam Address The register's address in memory
+   * @tparam Base The address base of the register
+   * @tparam Bits The register's size in Bits
+   * @tparam ValidBits The available bits in the register
+   *
+   * @since 1.0.0
+   */
   template<atl::ptrdiff_t Address,
            atl::ptrdiff_t Base,
            atl::int_types::uint_for_size_t<8> Bits,
@@ -165,6 +221,10 @@ namespace avr::internal::registers
   class rw_special_function_register : public special_function_register<Address, Base, Bits, ValidBits>
     {
     protected:
+      /**
+       * @internal
+       * @brief The bit type of this register
+       */
       template<decltype(ValidBits) BitIndex>
       using bit = rw_bit<rw_special_function_register, BitIndex>;
 
@@ -175,10 +235,10 @@ namespace avr::internal::registers
       /**
        * @brief Set the value of the complete register
        *
-       * Contrary to single-bit modifications via #bit, this functions can be used to set the value of the whole register by
-       * writing the register's full content.
+       * Contrary to single-bit modifications via avr::internal::registers::bit, this functions can be used to set the value of
+       * the whole register by writing the register's full content.
        *
-       * @see #get()
+       * @see atl::internal::registers::special_function_register::get
        */
       static auto constexpr set(value_type const value)
         {
@@ -186,6 +246,20 @@ namespace avr::internal::registers
         }
     };
 
+  /**
+   * @brief A safe wrapper for read-only AVR <b>Special Function Registers</b>
+   *
+   * This class provides a safe and zero-cost abstraction for the Spcial Purpose Registers found in AVR microcontrollers. All
+   * accesses to a register as well as its bits are bound checked, and violations of these bounds will cause compilation to
+   * fail.
+   *
+   * @tparam Address The register's address in memory
+   * @tparam Base The address base of the register
+   * @tparam Bits The register's size in Bits
+   * @tparam ValidBits The available bits in the register
+   *
+   * @since 1.0.0
+   */
   template<atl::ptrdiff_t Address,
            atl::ptrdiff_t Base,
            atl::int_types::uint_for_size_t<8> Bits,
@@ -196,6 +270,10 @@ namespace avr::internal::registers
                   "Address is not in I/O register range");
 
     protected:
+      /**
+       * @internal
+       * @brief The bit type of this register
+       */
       template<decltype(ValidBits) BitIndex>
       using bit = ro_bit<ro_special_function_register, BitIndex>;
     };
@@ -209,6 +287,8 @@ namespace avr::internal::registers
    * @tparam Address The register's address in memory
    * @tparam Bits The size of register in bits
    * @tparam ValidBits The available bits in the register
+   *
+   * @since 1.0.0
    */
   template<atl::ptrdiff_t Address, atl::int_types::uint_for_size_t<8> Bits, atl::int_types::uint_for_size_t<Bits> ValidBits>
   struct rw_io_register : rw_special_function_register<Address, 0x20, Bits, ValidBits> { };
@@ -222,6 +302,8 @@ namespace avr::internal::registers
    * @tparam Address The register's address in memory
    * @tparam Bits The size of register in bits
    * @tparam ValidBits The available bits in the register
+   *
+   * @since 1.0.0
    */
   template<atl::ptrdiff_t Address, atl::int_types::uint_for_size_t<8> Bits, atl::int_types::uint_for_size_t<Bits> ValidBits>
   struct ro_io_register : ro_special_function_register<Address, 0x20, Bits, ValidBits> { };
@@ -229,15 +311,20 @@ namespace avr::internal::registers
   /**
    * @brief A safe wrapper for PINx registers of an AVR microcontroller
    *
-   * This class provides access to the PINx registers of an AVR microcontroller. It provides a member type #pin to access a
-   * specific pin in the register.
+   * This class provides access to the PINx registers of an AVR microcontroller. It provides a member type <code>pin</code>
+   * to access a specific pin in the register.
    *
    * @tparam Address The register's address in memory
    * @tparam ValidBits The available bits in the register
+   *
+   * @since 1.0.0
    */
   template<atl::ptrdiff_t Address, atl::int_types::uint_for_size_t<8> ValidBits>
   struct pin_register : ro_io_register<Address, 8, ValidBits>
     {
+    /**
+     * A type alias to access a single pin-bit of the pin register
+     */
     template<decltype(ValidBits) PinNumber>
     using pin = typename ro_io_register<Address, 8, ValidBits>::template bit<PinNumber>;
     };
@@ -245,31 +332,41 @@ namespace avr::internal::registers
   /**
    * @brief A safe wrapper for DDRx registers of an AVR microcontroller
    *
-   * This class provides access to the DDRx registers of an AVR microcontroller. It provides a member type #ddr to access ddr
-   * bit for a specific pin in the register.
+   * This class provides access to the DDRx registers of an AVR microcontroller. It provides a member type <code>ddr</code>
+   * to access ddr bit for a specific ddr-bit in the register.
    *
    * @tparam Address The register's address in memory
    * @tparam ValidBits The available bits in the register
+   *
+   * @since 1.0.0
    */
   template<atl::ptrdiff_t Address, atl::int_types::uint_for_size_t<8> ValidBits>
   struct ddr_register : rw_io_register<Address, 8, ValidBits>
     {
+    /**
+     * A type alias to access a single ddr-bit of the ddr register
+     */
     template<decltype(ValidBits) DDRNumber>
     using ddr = typename rw_io_register<Address, 8, ValidBits>::template bit<DDRNumber>;
     };
 
   /**
-   * @brief A safe wrapper for PINx registers of an AVR microcontroller
+   * @brief A safe wrapper for PORTx registers of an AVR microcontroller
    *
-   * This class provides access to the PINx registers of an AVR microcontroller. It provides a member type #pin to access a
-   * specific pin in the register.
+   * This class provides access to the PORTx registers of an AVR microcontroller. It provides a member type <code>port</code> to
+   * access a specific port-bit in the register.
    *
    * @tparam Address The register's address in memory
    * @tparam ValidBits The available bits in the register
+   *
+   * @since 1.0.0
    */
   template<atl::ptrdiff_t Address, atl::int_types::uint_for_size_t<8> ValidBits>
   struct port_register : rw_io_register<Address, 8, ValidBits>
     {
+    /**
+     * A type alias to access a single port-bit of the port register
+     */
     template<decltype(ValidBits) PortNumber>
     using port = typename rw_io_register<Address, 8, ValidBits>::template bit<PortNumber>;
     };
