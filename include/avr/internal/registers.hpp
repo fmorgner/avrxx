@@ -45,7 +45,7 @@ namespace avr::internal::registers
     /**
      * @brief Retrieve the bit's current value
      */
-    static bool constexpr get()
+    static bool get()
       {
       return Register::special_function_register::reg() & (1 << Index);
       }
@@ -70,7 +70,7 @@ namespace avr::internal::registers
     /**
      * @brief Set the bit
      */
-    static void constexpr set()
+    static void set()
       {
       Register::special_function_register::reg() |= 1 << Index;
       }
@@ -78,7 +78,7 @@ namespace avr::internal::registers
     /**
      * @brief Clear the bit
      */
-    static void constexpr clear()
+    static void clear()
       {
       Register::special_function_register::reg() &= ~(1 << Index);
       }
@@ -86,7 +86,7 @@ namespace avr::internal::registers
     /**
      * @brief Toggle the bit's value
      */
-    static void constexpr toggle()
+    static void toggle()
       {
       Register::special_function_register::reg() ^= 1 << Index;
       }
@@ -174,7 +174,7 @@ namespace avr::internal::registers
        * @internal
        * @brief Retrieve a referene to the underlying memory location
        */
-      static decltype(auto) constexpr reg()
+      static decltype(auto) reg()
         {
         return (*reinterpret_cast<value_type volatile *>(EffectiveAddress));
         };
@@ -194,7 +194,7 @@ namespace avr::internal::registers
        *
        * @see atl::internal::registers::rw_special_function_register::set
        */
-      static auto constexpr get()
+      static auto get()
         {
         return reg();
         }
@@ -240,7 +240,7 @@ namespace avr::internal::registers
        *
        * @see atl::internal::registers::special_function_register::get
        */
-      static auto constexpr set(value_type const value)
+      static auto set(value_type const value)
         {
         reg() = value;
         }
