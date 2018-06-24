@@ -26,7 +26,7 @@ DIALECT = 'gnu'
 # The language standard version to use
 # For C use either '89', '90', '99', or '11'
 # For C++ use either '98', '03', '11', '14', or '1z' or '17'
-STD = '1z'
+STD = '17'
 
 # The project root directory
 # Generally the default (the directoy where this script lies) is ok.
@@ -46,6 +46,9 @@ PROJECT_FLAGS = [
     '-Wno-gnu',
     '-Werror',
     '-pedantic-errors',
+    '-mmcu=atmega328p',
+    '--target=avr',
+    '-D__AVR_DEVICE_NAME__=atmega328p',
 ]
 
 # Project local include paths
@@ -59,6 +62,7 @@ PROJECT_LOCAL_INCLUDES = [
 # Only absolute paths are applicable
 # NOTE: Do NOT use '-I' or other option flags, just simple paths
 PROJECT_EXTERNAL_INCLUDES = [
+    '/usr/avr/include',
 ]
 
 # Magic from here on out:
@@ -73,9 +77,12 @@ STD = (LANG if DIALECT == 'iso' else
        (DIALECT if LANG == 'c' else DIALECT + '++')) + STD
 
 CLANG_COMMAND = [
-    'avr-gcc',
+    'clang',
+    '--target=avr',
+    '-mmcu=atmega328p',
     '-v',
     '-E',
+    '-dM',
     '-x', LANG,
     '-std=' + STD,
     '-'
@@ -197,7 +204,7 @@ def project_external_includes():
     for path in paths:
         if not op.isabs(path):
             raise RuntimeError('Expected absolute path for external headers')
-        yield '-I'
+        yield '-isystem'
         yield op.abspath(path)
 
 
