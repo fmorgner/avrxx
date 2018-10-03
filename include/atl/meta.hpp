@@ -1,6 +1,8 @@
 #ifndef ATL_META_HPP
 #define ATL_META_HPP
 
+#include "atl/type_traits.hpp"
+
 /**
  * @file
  * @brief The <i>Template Meta-Programming Library</i>
@@ -22,6 +24,9 @@ namespace atl::meta
    */
   template<typename ValueType>
   constexpr auto in_range(ValueType value, ValueType low, ValueType high) { return value >= low && value <= high; }
+
+  template<typename ...>
+  using deferred_failure = atl::false_type;
 
   }
 
