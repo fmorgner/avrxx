@@ -12,15 +12,15 @@ specified width.
 Signed Integer Types
 ~~~~~~~~~~~~~~~~~~~~
 
-.. doxygentypedef:: atl::int8_t
-.. doxygentypedef:: atl::int16_t
-.. doxygentypedef:: atl::int32_t
-.. doxygentypedef:: atl::int64_t
+.. doxygentypedef:: avr::int8_t
+.. doxygentypedef:: avr::int16_t
+.. doxygentypedef:: avr::int32_t
+.. doxygentypedef:: avr::int64_t
 
 Unsigned Integer Types
 ~~~~~~~~~~~~~~~~~~~~~~
 
-.. doxygentypedef:: atl::uint8_t
-.. doxygentypedef:: atl::uint16_t
-.. doxygentypedef:: atl::uint32_t
-.. doxygentypedef:: atl::uint64_t
+.. doxygentypedef:: avr::uint8_t
+.. doxygentypedef:: avr::uint16_t
+.. doxygentypedef:: avr::uint32_t
+.. doxygentypedef:: avr::uint64_t

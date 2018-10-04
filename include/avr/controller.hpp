@@ -3,7 +3,7 @@
 
 /**
  * @file
- * @brief This file provides a type alias <code>atl::mcu</code> that maps to the correct underlying implementation
+ * @brief This file provides a type alias <code>avr::mcu</code> that maps to the correct underlying implementation
  *
  * @since 1.0.0
  */

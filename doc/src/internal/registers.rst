@@ -14,22 +14,22 @@ Usage Example
 The following code blocks demonstrates how to use the types described in this
 chapter to access a Special Function Register on an AVR microcontroller::
  
-  #include "avr/internal/registers.hpp"
+  #include "avr/register.hpp"
 
   struct mega328p {
     ~mega328p() = delete;
 
-    using pinb = registers::pin_register<0x23, 0b11111111>;
-    using ddrb = registers::ddr_register<0x24, 0b11111111>;
-    using portb = registers::port_register<0x25, 0b11111111>;
+    using pinb = pin_register<0x23, 0b11111111>;
+    using ddrb = ddr_register<0x24, 0b11111111>;
+    using portb = port_register<0x25, 0b11111111>;
 
-    using pinc = registers::pin_register<0x26, 0b01111111>;
-    using ddrc = registers::ddr_register<0x27, 0b01111111>;
-    using portc = registers::port_register<0x28, 0b01111111>;
+    using pinc = pin_register<0x26, 0b01111111>;
+    using ddrc = ddr_register<0x27, 0b01111111>;
+    using portc = port_register<0x28, 0b01111111>;
 
-    using pind = registers::pin_register<0x29, 0b11111111>;
-    using ddrd = registers::ddr_register<0x2a, 0b11111111>;
-    using portd = registers::port_register<0x2b, 0b11111111>;
+    using pind = pin_register<0x29, 0b11111111>;
+    using ddrd = ddr_register<0x2a, 0b11111111>;
+    using portd = port_register<0x2b, 0b11111111>;
   };
 
   int main() {
@@ -59,30 +59,30 @@ registers are checked at compile time
 Base Type
 =========
 
-.. doxygenclass:: avr::internal::registers::special_function_register
+.. doxygenclass:: avr::special_function_register
 
 Full Register Access
 --------------------
 
-.. doxygenfunction:: avr::internal::registers::special_function_register::get
+.. doxygenfunction:: avr::special_function_register::get
 
-.. doxygenfunction:: avr::internal::registers::rw_special_function_register::set
+.. doxygenfunction:: avr::rw_special_function_register::set
 
 Bitwise Register Access
 -----------------------
 
-.. doxygentypedef:: avr::internal::registers::rw_special_function_register::bit
-.. doxygentypedef:: avr::internal::registers::ro_special_function_register::bit
+.. doxygentypedef:: avr::rw_special_function_register::bit
+.. doxygentypedef:: avr::ro_special_function_register::bit
 
-.. doxygenstruct:: avr::internal::registers::bit
+.. doxygenstruct:: avr::bit
   :members:
 
-.. doxygenstruct:: avr::internal::registers::rw_bit
+.. doxygenstruct:: avr::rw_bit
   :members:
 
 Specialized Types and Aliases
 =============================
 
-.. doxygenstruct:: avr::internal::registers::pin_register
-.. doxygenstruct:: avr::internal::registers::ddr_register
-.. doxygenstruct:: avr::internal::registers::port_register
+.. doxygenstruct:: avr::pin_register
+.. doxygenstruct:: avr::ddr_register
+.. doxygenstruct:: avr::port_register

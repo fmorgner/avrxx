@@ -57,7 +57,7 @@ namespace avr
    * This class provides bounds safe access to single bits in a register. It also provides functions to set, clear, get, and
    * toggle the selected bit. If an bit index outside of the registers range is selected, compilation will fail.
    *
-   * @see avr::internal::registers::bit
+   * @see avr::bit
    *
    * @tparam Register The register this bit is a part of
    * @tparam Index The 0-based index of the bit inside the register.
@@ -98,7 +98,7 @@ namespace avr
    * This class provides bounds safe access to single bits in a register. It also provides a function to get the selected bit.
    * If an bit index outside of the registers range is selected, compilation will fail.
    *
-   * @see avr::internal::registers::bit
+   * @see avr::bit
    *
    * @tparam Register The register this bit is a part of
    * @tparam Index The 0-based index of the bit inside the register.
@@ -192,7 +192,7 @@ namespace avr
        *
        * This function enables the retrieval of the full contents of the underlying register.
        *
-       * @see avr::internal::registers::rw_special_function_register::set
+       * @see avr::rw_special_function_register::set
        */
       static auto get()
         {
@@ -235,10 +235,10 @@ namespace avr
       /**
        * @brief Set the value of the complete register
        *
-       * Contrary to single-bit modifications via avr::internal::registers::bit, this functions can be used to set the value of
+       * Contrary to single-bit modifications via avr::bit, this functions can be used to set the value of
        * the whole register by writing the register's full content.
        *
-       * @see avr::internal::registers::special_function_register::get
+       * @see avr::special_function_register::get
        */
       static auto set(value_type const value)
         {
