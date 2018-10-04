@@ -1,5 +1,5 @@
-#ifndef ATL_CSTDINT_HPP
-#define ATL_CSTDINT_HPP
+#ifndef AVR_CSTDINT_HPP
+#define AVR_CSTDINT_HPP
 
 /**
  * @file
@@ -8,7 +8,7 @@
  * @since 1.0.0
  */
 
-namespace atl
+namespace avr
   {
 
   /**

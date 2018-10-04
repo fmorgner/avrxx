@@ -13,7 +13,7 @@
 #endif
 
 #if defined(__AVR_ATmega328P__)
-#include "avr/internal/controllers/mega328p.h"
+#include "avr/controller/mega328p.h"
 #elif defined(__DOXYGEN__)
 namespace avr
   {

@@ -1,14 +1,18 @@
-#ifndef ATL_TYPE_TRAITS_HPP
-#define ATL_TYPE_TRAITS_HPP
+#ifndef AVR_TYPE_TRAITS_HPP
+#define AVR_TYPE_TRAITS_HPP
 
 /**
  * @file
- * @brief An implemetation of the ISO14882:2017 type_traits header
+ * @brief A partial implemetation of the ISO14882:2017 type_traits header
+ *
+ * This header provides a partial implementation of the @p type_traits header
+ * as specified by the C++ language standard, with the addition of some
+ * extensions.
  *
  * @since 1.0.0
  */
 
-namespace atl
+namespace avr
   {
 
   /**
@@ -23,23 +27,17 @@ namespace atl
   struct enable_if {};
 
   /**
-   * @brief Specialization of atl::enable_if in case the condition holds
+   * @brief Specialization of avr::enable_if in case the condition holds
    *
    * @tparam EnabledType The type to provide if @c Condition is @c true
    *
    * @since 1.0.0
    */
   template<typename EnabledType>
-  struct enable_if<true, EnabledType>
-    {
-    /**
-     * @brief The type present if the condition holds
-     */
-    using type = EnabledType;
-    };
+  struct enable_if<true, EnabledType> { using type = EnabledType; };
 
   /**
-   * @brief A convenience type alias for atl::enable_if
+   * @brief A convenience type alias for avr::enable_if
    *
    * @tparam Condition A boolean-valued expression to check
    * @tparam EnabledType The type to provide if @c Condition is @c true
@@ -61,7 +59,7 @@ namespace atl
   struct integral_constant
     {
     /**
-     * The type of the atl::integral_constant itself
+     * The type of the avr::integral_constant itself
      */
     using type = integral_constant;
 
@@ -76,23 +74,23 @@ namespace atl
     static value_type constexpr value = Value;
 
     /**
-     * Implicit conversion to a value of type atl::value_type
+     * Implicit conversion to a value of type avr::value_type
      */
     constexpr operator value_type() const noexcept { return value; }
 
     /**
-     * Call the atl::integral_constant to retrieve its value
+     * Call the avr::integral_constant to retrieve its value
      */
     constexpr value_type operator()() const noexcept { return value; }
     };
 
   /**
-   * @brief A convenience variable template that provides direct access to the value member of an atl::integral_constant
+   * @brief A convenience variable template that provides direct access to the value member of an avr::integral_constant
    *
    * @tparam ValueType An integral type
    * @tparam Value A value of the integral type specified by @p ValueType
    *
-   * @see atl::integral_constant
+   * @see avr::integral_constant
    *
    * @since 1.0.0
    */
@@ -112,7 +110,7 @@ namespace atl
   /**
    * @brief A template to test if a given type is an enum type
    *
-   * An instance of this template provides all the members of an atl::integral_constant of type @p bool that are set accordingly.
+   * An instance of this template provides all the members of an avr::integral_constant of type @p bool that are set accordingly.
    *
    * @tparam Candidate A type to test
    *
@@ -124,7 +122,7 @@ namespace atl
   /**
    * @brief A template to test if a given type is a union type
    *
-   * An instance of this template provides all the members of an atl::integral_constant of type @p bool that are set accordingly.
+   * An instance of this template provides all the members of an avr::integral_constant of type @p bool that are set accordingly.
    *
    * @tparam Candidate A type to test
    *
@@ -136,7 +134,7 @@ namespace atl
   /**
    * @brief A template to test if a given type is a class type
    *
-   * An instance of this template provides all the members of an atl::integral_constant of type @p bool that are set accordingly.
+   * An instance of this template provides all the members of an avr::integral_constant of type @p bool that are set accordingly.
    *
    * @tparam Candidate A type to test
    *
@@ -153,32 +151,20 @@ namespace atl
    * @since 1.0.0
    */
   template<typename Type>
-  struct remove_const
-    {
-    /**
-     * The given type without top-level const qualification
-     */
-    using type = Type;
-    };
+  struct remove_const { using type = Type; };
 
   /**
-   * @brief Specialization of atl::remove_const for types that are const qualified
+   * @brief Specialization of avr::remove_const for types that are const qualified
    *
    * @tparam Type The type to remove the const from
    *
    * @since 1.0.0
    */
   template<typename Type>
-  struct remove_const<Type const>
-    {
-    /**
-     * The given type without top-level const qualification
-     */
-    using type = Type;
-    };
+  struct remove_const<Type const> { using type = Type; };
 
   /**
-   * @brief A convenience type alias for atl::remove_const
+   * @brief A convenience type alias for avr::remove_const
    *
    * @tparam Type The type to remove the const from
    *
@@ -197,83 +183,47 @@ namespace atl
    * @since 1.0.0
    */
   template<typename SignedType>
-  struct make_unsigned
-    {
-    /**
-     * An unsigned type that is equivalent to the given signed type
-     */
-    using type = SignedType;
-    };
+  struct make_unsigned { using type = SignedType; };
 
   /**
-   * @brief Specialization of atl::make_unsigned for <code>signed char</code>
+   * @brief Specialization of avr::make_unsigned for <code>signed char</code>
    *
    * @since 1.0.0
    */
   template<>
-  struct make_unsigned<signed char>
-    {
-    /**
-     * An unsigned type that is equivalent to the given signed type
-     */
-    using type = unsigned char;
-    };
+  struct make_unsigned<signed char> { using type = unsigned char; };
 
   /**
-   * @brief Specialization of atl::make_unsigned for <code>signed short</code>
+   * @brief Specialization of avr::make_unsigned for <code>signed short</code>
    *
    * @since 1.0.0
    */
   template<>
-  struct make_unsigned<signed short>
-    {
-    /**
-     * An unsigned type that is equivalent to the given signed type
-     */
-    using type = unsigned short;
-    };
+  struct make_unsigned<signed short> { using type = unsigned short; };
 
   /**
-   * @brief Specialization of atl::make_unsigned for <code>signed int</code>
+   * @brief Specialization of avr::make_unsigned for <code>signed int</code>
    *
    * @since 1.0.0
    */
   template<>
-  struct make_unsigned<signed int>
-    {
-    /**
-     * An unsigned type that is equivalent to the given signed type
-     */
-    using type = unsigned int;
-    };
+  struct make_unsigned<signed int> { using type = unsigned int; };
 
   /**
-   * @brief Specialization of atl::make_unsigned for <code>signed long</code>
+   * @brief Specialization of avr::make_unsigned for <code>signed long</code>
    *
    * @since 1.0.0
    */
   template<>
-  struct make_unsigned<signed long>
-    {
-    /**
-     * An unsigned type that is equivalent to the given signed type
-     */
-    using type = unsigned long;
-    };
+  struct make_unsigned<signed long> { using type = unsigned long; };
 
   /**
-   * @brief Specialization of atl::make_unsigned for <code>signed long long</code>
+   * @brief Specialization of avr::make_unsigned for <code>signed long long</code>
    *
    * @since 1.0.0
    */
   template<>
-  struct make_unsigned<signed long long>
-    {
-    /**
-     * An unsigned type that is equivalent to the given signed type
-     */
-    using type = unsigned long long;
-    };
+  struct make_unsigned<signed long long> { using type = unsigned long long; };
 
   }
 

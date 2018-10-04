@@ -1,9 +1,9 @@
-#ifndef AVR_INTERNAL_REGISTERS_HPP
-#define AVR_INTERNAL_REGISTERS_HPP
+#ifndef AVR_REGISTER_HPP
+#define AVR_REGISTER_HPP
 
-#include "atl/meta.hpp"
-#include "atl/int_types.hpp"
-#include "atl/cstddef.hpp"
+#include "avr/meta.hpp"
+#include "avr/int_types.hpp"
+#include "avr/cstddef.hpp"
 
 /**
  * @file
@@ -13,21 +13,22 @@
  * @since 1.0.0
  */
 
-namespace avr::internal::registers
+namespace avr
   {
 
   /**
    * @brief The base class for all specialized safe bit wrappers
    *
-   * This class provides safe access to a bit in a given register. It ensures that the bit index is valid and causes a compile
-   * error otherwise.
+   * This class provides safe access to a bit in a given register. It ensures
+   * that the bit index is valid and causes a compile error otherwise.
    *
    * @tparam Register The register this bit is a part of
    * @tparam Index The index of this bit in its parent register
    *
    * @since 1.0.0
    */
-  template<typename Register, atl::int_types::uint_for_size_t<8> Index>
+  template<typename Register,
+           avr::uint_for_size_t<8> Index>
   struct bit
     {
     static_assert(Index <= Register::bits - 1, "Bit address is outside of register");
@@ -36,7 +37,6 @@ namespace avr::internal::registers
     bit() = delete;
     bit(bit const &) = delete;
     bit(bit &&) = delete;
-
     ~bit() = delete;
 
     bit & operator=(bit const &) = delete;
@@ -64,7 +64,7 @@ namespace avr::internal::registers
    *
    * @since 1.0.0
    */
-  template<typename Register, atl::int_types::uint_for_size_t<8> Index>
+  template<typename Register, avr::uint_for_size_t<8> Index>
   struct rw_bit : bit<Register, Index>
     {
     /**
@@ -105,7 +105,7 @@ namespace avr::internal::registers
    *
    * @since 1.0.0
    */
-  template<typename Register, atl::int_types::uint_for_size_t<8> Index>
+  template<typename Register, avr::uint_for_size_t<8> Index>
   struct ro_bit : bit<Register, Index> { };
 
   /**
@@ -123,14 +123,14 @@ namespace avr::internal::registers
    *
    * @since 1.0.0
    */
-  template<atl::ptrdiff_t Address,
-           atl::ptrdiff_t Base,
-           atl::int_types::uint_for_size_t<8> Bits,
-           atl::int_types::uint_for_size_t<Bits> ValidBits,
-           atl::ptrdiff_t EffectiveAddress = Base + Address>
+  template<avr::ptrdiff_t Address,
+           avr::ptrdiff_t Base,
+           avr::uint_for_size_t<8> Bits,
+           avr::uint_for_size_t<Bits> ValidBits,
+           avr::ptrdiff_t EffectiveAddress = Base + Address>
   class special_function_register
     {
-    static_assert(atl::meta::in_range(EffectiveAddress, 0x20, 0xff),
+    static_assert(avr::in_range(EffectiveAddress, 0x20, 0xff),
                   "Address is not in Special Function Register range [0x20, 0xff]");
 
     special_function_register() = delete;
@@ -185,14 +185,14 @@ namespace avr::internal::registers
        *
        * This type alias provides the type of the underlying register
        */
-      using value_type = atl::int_types::uint_for_size_t<Bits>;
+      using value_type = avr::uint_for_size_t<Bits>;
 
       /**
        * @brief Get the full contents of the register
        *
        * This function enables the retrieval of the full contents of the underlying register.
        *
-       * @see atl::internal::registers::rw_special_function_register::set
+       * @see avr::internal::registers::rw_special_function_register::set
        */
       static auto get()
         {
@@ -214,10 +214,10 @@ namespace avr::internal::registers
    *
    * @since 1.0.0
    */
-  template<atl::ptrdiff_t Address,
-           atl::ptrdiff_t Base,
-           atl::int_types::uint_for_size_t<8> Bits,
-           atl::int_types::uint_for_size_t<Bits> ValidBits>
+  template<avr::ptrdiff_t Address,
+           avr::ptrdiff_t Base,
+           avr::uint_for_size_t<8> Bits,
+           avr::uint_for_size_t<Bits> ValidBits>
   class rw_special_function_register : public special_function_register<Address, Base, Bits, ValidBits>
     {
     protected:
@@ -238,7 +238,7 @@ namespace avr::internal::registers
        * Contrary to single-bit modifications via avr::internal::registers::bit, this functions can be used to set the value of
        * the whole register by writing the register's full content.
        *
-       * @see atl::internal::registers::special_function_register::get
+       * @see avr::internal::registers::special_function_register::get
        */
       static auto set(value_type const value)
         {
@@ -260,13 +260,13 @@ namespace avr::internal::registers
    *
    * @since 1.0.0
    */
-  template<atl::ptrdiff_t Address,
-           atl::ptrdiff_t Base,
-           atl::int_types::uint_for_size_t<8> Bits,
-           atl::int_types::uint_for_size_t<Bits> ValidBits>
+  template<avr::ptrdiff_t Address,
+           avr::ptrdiff_t Base,
+           avr::uint_for_size_t<8> Bits,
+           avr::uint_for_size_t<Bits> ValidBits>
   class ro_special_function_register : public special_function_register<Address, Base, Bits, ValidBits>
     {
-    static_assert(atl::meta::in_range(special_function_register<Address, 0x20, Bits, ValidBits>::address, 0x20, 0x5f),
+    static_assert(avr::in_range(special_function_register<Address, 0x20, Bits, ValidBits>::address, 0x20, 0x5f),
                   "Address is not in I/O register range");
 
     protected:
@@ -290,7 +290,7 @@ namespace avr::internal::registers
    *
    * @since 1.0.0
    */
-  template<atl::ptrdiff_t Address, atl::int_types::uint_for_size_t<8> Bits, atl::int_types::uint_for_size_t<Bits> ValidBits>
+  template<avr::ptrdiff_t Address, avr::uint_for_size_t<8> Bits, avr::uint_for_size_t<Bits> ValidBits>
   struct rw_io_register : rw_special_function_register<Address, 0x20, Bits, ValidBits> { };
 
   /**
@@ -305,7 +305,7 @@ namespace avr::internal::registers
    *
    * @since 1.0.0
    */
-  template<atl::ptrdiff_t Address, atl::int_types::uint_for_size_t<8> Bits, atl::int_types::uint_for_size_t<Bits> ValidBits>
+  template<avr::ptrdiff_t Address, avr::uint_for_size_t<8> Bits, avr::uint_for_size_t<Bits> ValidBits>
   struct ro_io_register : ro_special_function_register<Address, 0x20, Bits, ValidBits> { };
 
   /**
@@ -319,7 +319,7 @@ namespace avr::internal::registers
    *
    * @since 1.0.0
    */
-  template<atl::ptrdiff_t Address, atl::int_types::uint_for_size_t<8> ValidBits>
+  template<avr::ptrdiff_t Address, avr::uint_for_size_t<8> ValidBits>
   struct pin_register : ro_io_register<Address, 8, ValidBits>
     {
     /**
@@ -340,7 +340,7 @@ namespace avr::internal::registers
    *
    * @since 1.0.0
    */
-  template<atl::ptrdiff_t Address, atl::int_types::uint_for_size_t<8> ValidBits>
+  template<avr::ptrdiff_t Address, avr::uint_for_size_t<8> ValidBits>
   struct ddr_register : rw_io_register<Address, 8, ValidBits>
     {
     /**
@@ -361,7 +361,7 @@ namespace avr::internal::registers
    *
    * @since 1.0.0
    */
-  template<atl::ptrdiff_t Address, atl::int_types::uint_for_size_t<8> ValidBits>
+  template<avr::ptrdiff_t Address, avr::uint_for_size_t<8> ValidBits>
   struct port_register : rw_io_register<Address, 8, ValidBits>
     {
     /**

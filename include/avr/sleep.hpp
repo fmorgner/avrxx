@@ -6,7 +6,7 @@
 /**
  * @brief The AVR power saving sleep API wrapper
  */
-namespace avr::sleep
+namespace avr
   {
 
   /**

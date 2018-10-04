@@ -1,7 +1,7 @@
-#ifndef ATL_META_HPP
-#define ATL_META_HPP
+#ifndef AVR_META_HPP
+#define AVR_META_HPP
 
-#include "atl/type_traits.hpp"
+#include "avr/type_traits.hpp"
 
 /**
  * @file
@@ -10,7 +10,7 @@
  * @since 1.0.0
  */
 
-namespace atl::meta
+namespace avr
   {
 
   /**
@@ -26,7 +26,7 @@ namespace atl::meta
   constexpr auto in_range(ValueType value, ValueType low, ValueType high) { return value >= low && value <= high; }
 
   template<typename ...>
-  using deferred_failure = atl::false_type;
+  using deferred_failure = avr::false_type;
 
   }
 
