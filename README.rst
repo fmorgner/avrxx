@@ -2,10 +2,6 @@
 AVR++
 #####
 
-.. image:: https://api.bintray.com/packages/fmorgner/conan-fmorgner/AVR%2B%2B%3Afmorgner/images/download.svg
-   :target: https://bintray.com/fmorgner/conan-fmorgner/AVR%2B%2B%3Afmorgner/_latestVersion)
-   :alt: Conan Package
-
 .. image:: https://readthedocs.org/projects/avrxx/badge/?version=latest
    :target: http://avrxx.readthedocs.io/en/latest/?badge=latest
    :alt: Documentation Status
@@ -74,33 +70,25 @@ the Docs <http://avrxx.readthedocs.io/>`_ or build it yourself.
 Build Requirements
 ------------------
 
-AVR++ provides a **pip** requirements file at `doc/requirements.txt`. You can
-use this file to install **Sphinx**, **Breathe**, and the **Sphix Read the Docs
-theme**. In addition to a basic Sphinx setup, you will also need a reasonably
-modern version of `Doxygen <http://www.stack.nl/~dimitri/doxygen/>`_. A clean
-way to manage the Python dependencies is to use **virtualenv** or
-**virtualenvwrapper** to create an isolated Python environment.
+AVR++ provides a **pipenv** `Pipfile`. You can use this file to install
+**Sphinx**, **Breathe**, and the **Sphix Read the Docs theme**. In addition to a
+basic Sphinx setup, you will also need a reasonably modern version of
+`Doxygen <http://www.stack.nl/~dimitri/doxygen/>`_. A clean way to manage the
+Python dependencies is to use **pipenv** isolated Python environment.
 
 To install the required Python packages, simply run the following command on
 Linux from the source root of the project:
 
 .. code-block:: bash
 
-  $ pip install -r doc/requirements.txt
+  $ pipenv install
 
 After successfully installing the require Python packages, you can build the
-documentation using either the following command from the source root:
+documentation using either the following command from the `doc` directory:
 
 .. code-block:: bash
 
-  $ make doc
+  $ pipenv run make doc html
 
-or if you want to have more control over the build product, using the following
-command from the `doc` directory:
-
-.. code-block:: bash
-
-  $ make <output-format>
-
-where you replace `<output-format>` by your desired output format, for example
-`man`, `epub`, `pdf`, or `html`.
+you can specify different output formats by simply replacing `html` by your
+desired output format, for example `man`, `epub`, or `pdf`.
