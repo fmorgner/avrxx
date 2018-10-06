@@ -17,103 +17,12 @@ namespace avr
   {
 
   /**
-   * @brief The base class for all specialized safe bit wrappers
-   *
-   * This class provides safe access to a bit in a given register. It ensures
-   * that the bit index is valid and causes a compile error otherwise.
-   *
-   * @tparam Register The register this bit is a part of
-   * @tparam Index The index of this bit in its parent register
-   *
-   * @since 1.0.0
-   */
-  template<typename Register,
-           avr::uint_for_size_t<8> Index>
-  struct bit
-    {
-    static_assert(Index <= Register::bits - 1, "Bit address is outside of register");
-    static_assert(Register::validBits & (1 << Index), "Bit is reserved");
-
-    bit() = delete;
-    bit(bit const &) = delete;
-    bit(bit &&) = delete;
-    ~bit() = delete;
-
-    bit & operator=(bit const &) = delete;
-    bit & operator=(bit &&) = delete;
-
-    /**
-     * @brief Retrieve the bit's current value
-     */
-    static bool get()
-      {
-      return Register::special_function_register::reg() & (1 << Index);
-      }
-    };
-
-  /**
-   * @brief A safe wrapper for a single read-write bit of a register
-   *
-   * This class provides bounds safe access to single bits in a register. It also provides functions to set, clear, get, and
-   * toggle the selected bit. If an bit index outside of the registers range is selected, compilation will fail.
-   *
-   * @see avr::bit
-   *
-   * @tparam Register The register this bit is a part of
-   * @tparam Index The 0-based index of the bit inside the register.
-   *
-   * @since 1.0.0
-   */
-  template<typename Register, avr::uint_for_size_t<8> Index>
-  struct rw_bit : bit<Register, Index>
-    {
-    /**
-     * @brief Set the bit
-     */
-    static void set()
-      {
-      Register::special_function_register::reg() |= 1 << Index;
-      }
-
-    /**
-     * @brief Clear the bit
-     */
-    static void clear()
-      {
-      Register::special_function_register::reg() &= ~(1 << Index);
-      }
-
-    /**
-     * @brief Toggle the bit's value
-     */
-    static void toggle()
-      {
-      Register::special_function_register::reg() ^= 1 << Index;
-      }
-    };
-
-  /**
-   * @brief A safe wrapper for a single read-only bit of a register
-   *
-   * This class provides bounds safe access to single bits in a register. It also provides a function to get the selected bit.
-   * If an bit index outside of the registers range is selected, compilation will fail.
-   *
-   * @see avr::bit
-   *
-   * @tparam Register The register this bit is a part of
-   * @tparam Index The 0-based index of the bit inside the register.
-   *
-   * @since 1.0.0
-   */
-  template<typename Register, avr::uint_for_size_t<8> Index>
-  struct ro_bit : bit<Register, Index> { };
-
-  /**
    * @brief A safe wrapper for AVR <b>Special Function Registers</b>
    *
-   * This class provides a safe and zero-cost abstraction for the Spcial Purpose Registers found in AVR microcontrollers. All
-   * accesses to a register as well as its bits are bound checked, and violations of these bounds will cause compilation to
-   * fail.
+   * This class provides a safe and zero-cost abstraction for the Spcial
+   * Purpose Registers found in AVR microcontrollers. All accesses to a
+   * register as well as its bits are bound checked, and violations of these
+   * bounds will cause compilation to fail.
    *
    * @tparam Address The register's address in memory
    * @tparam Base The address base of the register
@@ -124,39 +33,27 @@ namespace avr
    * @since 1.0.0
    */
   template<avr::ptrdiff_t Address,
-           avr::ptrdiff_t Base,
            avr::uint_for_size_t<8> Bits,
-           avr::uint_for_size_t<Bits> ValidBits,
-           avr::ptrdiff_t EffectiveAddress = Base + Address>
+           avr::uint_for_size_t<Bits> ValidBits>
   class special_function_register
     {
-    static_assert(avr::in_range(EffectiveAddress, 0x20, 0xff),
+    static_assert(avr::in_range(Address, 0x20, 0xff),
                   "Address is not in Special Function Register range [0x20, 0xff]");
 
     special_function_register() = delete;
     special_function_register(special_function_register const &) = delete;
     special_function_register(special_function_register &&) = delete;
-
     ~special_function_register() = delete;
 
     special_function_register & operator=(special_function_register const &) = delete;
     special_function_register & operator=(special_function_register &&) = delete;
-
-    template<typename Register, decltype(ValidBits) PinNumber>
-    friend struct bit;
-
-    template<typename Register, decltype(ValidBits) PinNumber>
-    friend struct rw_bit;
-
-    template<typename Register, decltype(ValidBits) PinNumber>
-    friend struct ro_bit;
 
     protected:
       /**
        * @internal
        * The effective register address in memory space
        */
-      static auto constexpr address = EffectiveAddress;
+      static auto constexpr address = Address;
 
       /**
        * @internal
@@ -174,10 +71,7 @@ namespace avr
        * @internal
        * @brief Retrieve a referene to the underlying memory location
        */
-      static decltype(auto) reg()
-        {
-        return (*reinterpret_cast<value_type volatile *>(EffectiveAddress));
-        };
+      static decltype(auto) reg() { return (*reinterpret_cast<value_type volatile *>(address)); };
 
     public:
       /**
@@ -194,9 +88,15 @@ namespace avr
        *
        * @see avr::rw_special_function_register::set
        */
-      static auto get()
+      static auto get() { return reg(); }
+
+      static auto get_bit(avr::uint8_t const bit) { return !!(reg() & (1 << bit)); }
+
+      template<avr::uint8_t Bit>
+      static auto get_bit()
         {
-        return reg();
+        static_assert(validBits & (1 << Bit), "Bit index is invalid!");
+        return get_bit(Bit);
         }
     };
 
@@ -215,21 +115,14 @@ namespace avr
    * @since 1.0.0
    */
   template<avr::ptrdiff_t Address,
-           avr::ptrdiff_t Base,
            avr::uint_for_size_t<8> Bits,
            avr::uint_for_size_t<Bits> ValidBits>
-  class rw_special_function_register : public special_function_register<Address, Base, Bits, ValidBits>
+  class rw_special_function_register : public special_function_register<Address, Bits, ValidBits>
     {
     protected:
-      /**
-       * @internal
-       * @brief The bit type of this register
-       */
-      template<decltype(ValidBits) BitIndex>
-      using bit = rw_bit<rw_special_function_register, BitIndex>;
-
-      using special_function_register<Address, Base, Bits, ValidBits>::reg;
-      using typename special_function_register<Address, Base, Bits, ValidBits>::value_type;
+      using special_function_register<Address, Bits, ValidBits>::reg;
+      using special_function_register<Address, Bits, ValidBits>::valid_bits;
+      using typename special_function_register<Address, Bits, ValidBits>::value_type;
 
     public:
       /**
@@ -240,9 +133,15 @@ namespace avr
        *
        * @see avr::special_function_register::get
        */
-      static auto set(value_type const value)
+      static auto set(value_type const value) { reg() = value; }
+
+      static auto set_bit_unsafe(uint8_t const bit) { reg() |= 1 << bit; }
+
+      template<uint8_t Bit>
+      static auto set_bit()
         {
-        reg() = value;
+        static_assert(valid_bits & (1 << Bit), "Bit index is invalid!");
+        set_bit_unsafe(Bit);
         }
     };
 
@@ -261,22 +160,9 @@ namespace avr
    * @since 1.0.0
    */
   template<avr::ptrdiff_t Address,
-           avr::ptrdiff_t Base,
            avr::uint_for_size_t<8> Bits,
            avr::uint_for_size_t<Bits> ValidBits>
-  class ro_special_function_register : public special_function_register<Address, Base, Bits, ValidBits>
-    {
-    static_assert(avr::in_range(special_function_register<Address, 0x20, Bits, ValidBits>::address, 0x20, 0x5f),
-                  "Address is not in I/O register range");
-
-    protected:
-      /**
-       * @internal
-       * @brief The bit type of this register
-       */
-      template<decltype(ValidBits) BitIndex>
-      using bit = ro_bit<ro_special_function_register, BitIndex>;
-    };
+  using ro_special_function_register = special_function_register<Address, Bits, ValidBits>;
 
   /**
    * @brief A safe register wrapper to access the I/O registers of an AVR microcontroller
@@ -291,7 +177,7 @@ namespace avr
    * @since 1.0.0
    */
   template<avr::ptrdiff_t Address, avr::uint_for_size_t<8> Bits, avr::uint_for_size_t<Bits> ValidBits>
-  struct rw_io_register : rw_special_function_register<Address, 0x20, Bits, ValidBits> { };
+  struct rw_io_register : rw_special_function_register<Address, Bits, ValidBits> { };
 
   /**
    * @brief A safe register wrapper to access the I/O registers of an AVR microcontroller
@@ -306,7 +192,7 @@ namespace avr
    * @since 1.0.0
    */
   template<avr::ptrdiff_t Address, avr::uint_for_size_t<8> Bits, avr::uint_for_size_t<Bits> ValidBits>
-  struct ro_io_register : ro_special_function_register<Address, 0x20, Bits, ValidBits> { };
+  struct ro_io_register : ro_special_function_register<Address, Bits, ValidBits> { };
 
   /**
    * @brief A safe wrapper for PINx registers of an AVR microcontroller
@@ -320,14 +206,7 @@ namespace avr
    * @since 1.0.0
    */
   template<avr::ptrdiff_t Address, avr::uint_for_size_t<8> ValidBits>
-  struct pin_register : ro_io_register<Address, 8, ValidBits>
-    {
-    /**
-     * A type alias to access a single pin-bit of the pin register
-     */
-    template<decltype(ValidBits) PinNumber>
-    using pin = typename ro_io_register<Address, 8, ValidBits>::template bit<PinNumber>;
-    };
+  using pin_register = ro_io_register<Address, 8, ValidBits>;
 
   /**
    * @brief A safe wrapper for DDRx registers of an AVR microcontroller
@@ -341,14 +220,7 @@ namespace avr
    * @since 1.0.0
    */
   template<avr::ptrdiff_t Address, avr::uint_for_size_t<8> ValidBits>
-  struct ddr_register : rw_io_register<Address, 8, ValidBits>
-    {
-    /**
-     * A type alias to access a single ddr-bit of the ddr register
-     */
-    template<decltype(ValidBits) DDRNumber>
-    using ddr = typename rw_io_register<Address, 8, ValidBits>::template bit<DDRNumber>;
-    };
+  using ddr_register = rw_io_register<Address, 8, ValidBits>;
 
   /**
    * @brief A safe wrapper for PORTx registers of an AVR microcontroller
@@ -362,14 +234,7 @@ namespace avr
    * @since 1.0.0
    */
   template<avr::ptrdiff_t Address, avr::uint_for_size_t<8> ValidBits>
-  struct port_register : rw_io_register<Address, 8, ValidBits>
-    {
-    /**
-     * A type alias to access a single port-bit of the port register
-     */
-    template<decltype(ValidBits) PortNumber>
-    using port = typename rw_io_register<Address, 8, ValidBits>::template bit<PortNumber>;
-    };
+  using port_register = rw_io_register<Address, 8, ValidBits>;
   }
 
 #endif
