@@ -1,0 +1,18 @@
+# vim: ft=cmake ts=2 sw=2 et
+
+if(NOT AVR_GCC)
+  set(CROSS_GCC_PREFIX "avr-")
+  find_program(CMAKE_CXX_COMPILER "${CROSS_GCC_PREFIX}g++" DOC "Path to ${CROSS_GCC_PREFIX}g++")
+  find_program(CMAKE_C_COMPILER "${CROSS_GCC_PREFIX}gcc" DOC "Path to ${CROSS_GCC_PREFIX}g++")
+  find_program(CMAKE_OBJDUMP "${CROSS_GCC_PREFIX}objdump" DOC "Path to ${CROSS_GCC_PREFIX}objdump")
+  find_program(CMAKE_OBJCOPY "${CROSS_GCC_PREFIX}objcopy" DOC "Path to ${CROSS_GCC_PREFIX}objcopy")
+  find_program(CMAKE_NM "${CROSS_GCC_PREFIX}nm" DOC "Path to ${CROSS_GCC_PREFIX}nm")
+  find_program(CMAKE_CXX_COMPILER_RANLIB "${CROSS_GCC_PREFIX}ranlib" DOC "Path to ${CROSS_GCC_PREFIX}ranlib")
+  find_program(CMAKE_STRIP "${CROSS_GCC_PREFIX}strip" DOC "Path to ${CROSS_GCC_PREFIX}strip")
+  find_program(CMAKE_LINKER "${CROSS_GCC_PREFIX}ld" DOC "Path to ${CROSS_GCC_PREFIX}ld")
+  find_program(CMAKE_CXX_COMPILER_AR "${CROSS_GCC_PREFIX}ar" DOC "Path to ${CROSS_GCC_PREFIX}ar")
+  find_program(CMAKE_AVRDUDE "avrdude" DOC "Path to avrdude")
+  mark_as_advanced(CMAKE_AVRDUDE)
+  set(CMAKE_SYSTEM_NAME "Generic")
+  set(CMAKE_SYSTEM_PROCESSOR "avr")
+endif()

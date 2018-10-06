@@ -2,6 +2,7 @@
 bin
 hex
 obj
+build
 
 # Documentation folders
 doc/build

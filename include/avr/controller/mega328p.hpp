@@ -1,5 +1,5 @@
-#ifndef AVR_CONTROLLER_MEGA328P_H
-#define AVR_CONTROLLER_MEGA328P_H
+#ifndef AVR_CONTROLLER_MEGA328P_HPP
+#define AVR_CONTROLLER_MEGA328P_HPP
 
 #include "avr/register.hpp"
 #include "avr/type_traits.hpp"
@@ -25,6 +25,8 @@ namespace avr
     using pind = pin_register<0x29, 0b11111111>;
     using ddrd = ddr_register<0x2a, 0b11111111>;
     using portd = port_register<0x2b, 0b11111111>;
+
+    using mcucr = rw_special_function_register<0x55, 8, 0b01110011>;
 
     template<typename Type, auto>
     static auto read_program_memory(Type const * address) { return read_program_memory(address); }
