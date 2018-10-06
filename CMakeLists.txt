@@ -20,9 +20,16 @@ include(CMakeParseArguments)
 
 include_directories("${PROJECT_SOURCE_DIR}/include")
 
-add_firmware(demo
+add_firmware(cpp_demo
   MCU "atmega328p"
   CLOCK_FREQUENCY "16000000"
   SOURCES
-  "src/main.cpp"
+  "src/demo.cpp"
+  )
+
+add_firmware(c_demo
+  MCU "atmega328p"
+  CLOCK_FREQUENCY "16000000"
+  SOURCES
+  "src/demo.c"
   )
