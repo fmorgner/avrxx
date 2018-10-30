@@ -6,5 +6,5 @@ int main()
     {
     return !!(PINC & (1 << 4));
     }
-  return !!(PINC & (1 << 6));
+  return PINC;
   }
