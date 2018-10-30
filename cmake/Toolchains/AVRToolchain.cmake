@@ -17,6 +17,9 @@ if(NOT AVR_GCC)
   set(CMAKE_SYSTEM_PROCESSOR "avr")
 endif()
 
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
+set(AVR_HEX_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/hex")
+
 function(add_firmware TARGET)
   set(OPTIONS HEX)
   set(SINGLE_VALUE_ARGUMENTS MCU CLOCK_FREQUENCY)
@@ -28,16 +31,17 @@ function(add_firmware TARGET)
     ${ARGN}
     )
 
+  file(MAKE_DIRECTORY ${AVR_HEX_OUTPUT_DIRECTORY})
+
   add_executable(${TARGET} ${ADD_FIRMWARE_SOURCES})
   set_target_properties(${TARGET} PROPERTIES
     COMPILE_FLAGS "-mmcu=${ADD_FIRMWARE_MCU}"
     LINK_FLAGS "-mmcu=${ADD_FIRMWARE_MCU}"
     COMPILE_DEFINITIONS "F_CPU=${ADD_FIRMWARE_CLOCK_FREQUENCY}"
     )
-  get_target_property(${TARGET}_HEX ${TARGET} RUNTIME_OUTPUT_DIRECTORY)
   add_custom_command(TARGET ${TARGET}
     POST_BUILD
-    COMMAND ${CMAKE_OBJCOPY} -j .text -j .data -O ihex $<TARGET_FILE:${TARGET}> $<TARGET_FILE:${TARGET}>.hex
+    COMMAND ${CMAKE_OBJCOPY} -j .text -j .data -O ihex $<TARGET_FILE:${TARGET}> "${AVR_HEX_OUTPUT_DIRECTORY}/${TARGET}.hex"
     )
   add_custom_target(${TARGET}_disassemble
     COMMAND ${CMAKE_OBJDUMP} -d $<TARGET_FILE:${TARGET}>

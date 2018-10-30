@@ -1,5 +1,9 @@
 # vim: ft=cmake ts=2 sw=2 et
 
+if(NOT CMAKE_TOOLCHAIN_FILE)
+  set(CMAKE_TOOLCHAIN_FILE "${CMAKE_SOURCE_DIR}/cmake/Toolchains/AVRToolchain.cmake")
+endif()
+
 cmake_minimum_required(VERSION 3.9)
 project("avrxx"
   VERSION 1.0.0
