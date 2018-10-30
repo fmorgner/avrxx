@@ -225,6 +225,20 @@ namespace avr
   template<>
   struct make_unsigned<signed long long> { using type = unsigned long long; };
 
+  /**
+   * @brief A type to select between two types bassed on the given predicate
+   *
+   * @since 1.0.0
+   */
+  template<bool Predicate, typename, typename ElseType>
+  struct conditional { using type = ElseType; };
+
+  template<typename ThenType, typename ElseType>
+  struct conditional<true, ThenType, ElseType> { using type = ThenType; };
+
+  template<bool Predicate, typename ThenType, typename ElseType>
+  using conditional_t = typename conditional<Predicate, ThenType, ElseType>::type;
+
   }
 
 #endif
