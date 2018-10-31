@@ -33,3 +33,31 @@ add_firmware(c_demo
   SOURCES
   "src/demo.c"
   )
+
+add_firmware(cpp_demo_portc
+  MCU "atmega328p"
+  CLOCK_FREQUENCY "16000000"
+  SOURCES
+  "src/demo_portc.cpp"
+  )
+
+add_firmware(c_demo_portc
+  MCU "atmega328p"
+  CLOCK_FREQUENCY "16000000"
+  SOURCES
+  "src/demo_portc.c"
+  )
+
+add_firmware(cpp_demo_progmem
+  MCU "atmega328p"
+  CLOCK_FREQUENCY "16000000"
+  SOURCES
+  "src/demo_progmem.cpp"
+  )
+
+add_firmware(c_demo_progmem
+  MCU "atmega328p"
+  CLOCK_FREQUENCY "16000000"
+  SOURCES
+  "src/demo_progmem.c"
+  )

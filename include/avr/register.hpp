@@ -65,7 +65,7 @@ namespace avr
        * @internal
        * A bitmap describing the accessible bits of this register
        */
-      static auto constexpr validBits = ValidBits;
+      static auto constexpr valid_bits = ValidBits;
 
       /**
        * @internal
@@ -95,7 +95,7 @@ namespace avr
       template<avr::uint8_t Bit>
       static auto get_bit()
         {
-        static_assert(validBits & (1 << Bit), "Bit index is invalid!");
+        static_assert(valid_bits & (1 << Bit), "Bit index is invalid!");
         return get_bit(Bit);
         }
     };
