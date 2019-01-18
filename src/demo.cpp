@@ -2,9 +2,9 @@
 
 int main()
   {
-  if(avr::mcu::pinc::get<avr::pin::three>())
+  if(avr::mcu::pinc::get_pin<3>())
     {
-    return avr::mcu::pinc::get_unsafe(avr::pin::four);
+    return avr::mcu::pinc::get_pin_unsafe(4);
     }
-  return avr::mcu::pinc::get_bit<6>();
+  return avr::mcu::pinc::get_pin<6>();
   }

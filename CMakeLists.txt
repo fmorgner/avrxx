@@ -11,57 +11,23 @@ project("avrxx"
   DESCRIPTION "A modern C++ interface to AVR microcontrollers"
   )
 
+set(CMAKE_C_STANDARD "11")
+set(CMAKE_C_EXTENSIONS Off)
+set(CMAKE_C_STANDARD_REQUIRED On)
+
 set(CMAKE_CXX_STANDARD "17")
 set(CMAKE_CXX_EXTENSIONS Off)
 set(CMAKE_CXX_STANDARD_REQUIRED On)
+
 set(CMAKE_INTERPROCEDURAL_OPTIMIZATION On)
 
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE "MinSizeRel")
 endif()
 
-include(CMakeParseArguments)
+add_library("avrxx" INTERFACE)
+target_include_directories("avrxx" INTERFACE "${PROJECT_SOURCE_DIR}/include")
+target_compile_options("avrxx" INTERFACE "-mmcu=${AVRXX_MCU}")
+target_compile_definitions("avrxx" INTERFACE "-DF_CPU=${AVRXX_CLOCK}")
 
-include_directories("${PROJECT_SOURCE_DIR}/include")
-
-add_firmware(cpp_demo
-  MCU "atmega328p"
-  CLOCK_FREQUENCY "16000000"
-  SOURCES
-  "src/demo.cpp"
-  )
-
-add_firmware(c_demo
-  MCU "atmega328p"
-  CLOCK_FREQUENCY "16000000"
-  SOURCES
-  "src/demo.c"
-  )
-
-add_firmware(cpp_demo_portc
-  MCU "atmega328p"
-  CLOCK_FREQUENCY "16000000"
-  SOURCES
-  "src/demo_portc.cpp"
-  )
-
-add_firmware(c_demo_portc
-  MCU "atmega328p"
-  CLOCK_FREQUENCY "16000000"
-  SOURCES
-  "src/demo_portc.c"
-  )
-
-add_firmware(cpp_demo_progmem
-  MCU "atmega328p"
-  CLOCK_FREQUENCY "16000000"
-  SOURCES
-  "src/demo_progmem.cpp"
-  )
-
-add_firmware(c_demo_progmem
-  MCU "atmega328p"
-  CLOCK_FREQUENCY "16000000"
-  SOURCES
-  "src/demo_progmem.c"
-  )
+add_subdirectory("src")
