@@ -1,14 +1,12 @@
-# pylint: disable=missing-docstring,not-callable
 from conans import ConanFile
 
 
 class AVRXXConan(ConanFile):
     name = 'AVR++'
     description = (
-        'AVR++ is a C++17 interface to Atmel AVR 8-bit microcontrollers. The '
-        'goal of AVR++ is to provide a safe, clean, and zero-overhead '
-        'interface to work with with AVR microcontrollers while still '
-        'allowing for great flexibility and customizability.'
+        'AVR++ is a C++17 interface to Atmel AVR 8-bit microcontrollers.'
+        'The goal of AVR++ is to provide a safe, clean, and zero-cost interface to AVR MCUs.'
+        'At the same time, AVR++ provides great flexibility and customizability.'
     )
     version = '1.0.0'
     settings = (
@@ -22,7 +20,7 @@ class AVRXXConan(ConanFile):
     )
 
     def package(self):
-        self.copy('*.hpp', src='include', dst='include')
+        self.copy('*', src='include', dst='include')
 
     def package_info(self):
         self.cpp_info.includedirs = ['include']
