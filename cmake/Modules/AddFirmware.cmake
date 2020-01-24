@@ -40,5 +40,6 @@ function(add_firmware TARGET)
   endif()
 
   target_compile_options("avrxx" INTERFACE "-mmcu=${ADD_FIRMWARE_MCU}")
+  target_link_options("avrxx" INTERFACE "-mmcu=${ADD_FIRMWARE_MCU}")
   target_compile_definitions("avrxx" INTERFACE "-DF_CPU=${ADD_FIRMWARE_CLOCK}")
 endfunction()
