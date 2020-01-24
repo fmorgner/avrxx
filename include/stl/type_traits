@@ -1,0 +1,86 @@
+#ifndef AVRXX_STL_TYPE_TRAITS
+#define AVRXX_STL_TYPE_TRAITS
+
+namespace std
+  {
+
+  template<bool Condition, typename EnabledType = void>
+  struct enable_if {};
+
+  template<typename EnabledType>
+  struct enable_if<true, EnabledType> { using type = EnabledType; };
+
+  template<bool Condition, typename EnabledType>
+  using enable_if_t = typename enable_if<Condition, EnabledType>::type;
+
+
+  template<typename ValueType, ValueType Value>
+  struct integral_constant
+    {
+    using type = integral_constant;
+    using value_type = ValueType;
+
+    static value_type constexpr value = Value;
+    constexpr operator value_type() const noexcept { return value; }
+
+    constexpr value_type operator()() const noexcept { return value; }
+    };
+
+  template<typename ValueType, ValueType Value>
+  auto constexpr integral_constant_v = integral_constant<ValueType, Value>::value;
+
+  using false_type = integral_constant<bool, false>;
+  using true_type = integral_constant<bool, true>;
+
+
+  template<typename Candidate>
+  struct is_enum : integral_constant<bool, __is_enum(Candidate)> { };
+
+  template<typename Candidate>
+  struct is_union : integral_constant<bool, __is_union(Candidate)> { };
+
+  template<typename Candidate>
+  struct is_class : integral_constant<bool, __is_class(Candidate)> { };
+
+
+  template<typename Type>
+  struct remove_const { using type = Type; };
+
+  template<typename Type>
+  struct remove_const<Type const> { using type = Type; };
+
+  template<typename Type>
+  using remove_const_t = typename remove_const<Type>::type;
+
+
+  template<typename SignedType>
+  struct make_unsigned { using type = SignedType; };
+
+  template<>
+  struct make_unsigned<signed char> { using type = unsigned char; };
+
+  template<>
+  struct make_unsigned<signed short> { using type = unsigned short; };
+
+  template<>
+  struct make_unsigned<signed int> { using type = unsigned int; };
+
+  template<>
+  struct make_unsigned<signed long> { using type = unsigned long; };
+
+  template<>
+  struct make_unsigned<signed long long> { using type = unsigned long long; };
+
+
+  template<bool Predicate, typename, typename ElseType>
+  struct conditional { using type = ElseType; };
+
+  template<typename ThenType, typename ElseType>
+  struct conditional<true, ThenType, ElseType> { using type = ThenType; };
+
+  template<bool Predicate, typename ThenType, typename ElseType>
+  using conditional_t = typename conditional<Predicate, ThenType, ElseType>::type;
+
+  }
+
+#endif

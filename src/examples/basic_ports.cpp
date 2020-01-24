@@ -1,10 +1,9 @@
-// #include <avr/controller.hpp>
+#include <avrxx/controller.hpp>
 
 int main()
   {
-  // if(avr::mcu::pinc::get_pin<3>())
-  //   {
-  //   return avr::mcu::pinc::get_pin_unsafe(4);
-  //   }
-  // return avr::mcu::pinc::get_pin<6>();
+  if(avr::mcu::pinc::get_pin<3>())
+    {
+    avr::mcu::portc::set_bit_unsafe(4);
+    }
   }

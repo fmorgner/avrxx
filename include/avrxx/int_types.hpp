@@ -1,123 +1,45 @@
-#ifndef AVR_INT_TYPES_HPP
-#define AVR_INT_TYPES_HPP
+#ifndef AVRXX_INT_TYPES_HPP
+#define AVRXX_INT_TYPES_HPP
 
-#include "avr/cstdint.hpp"
-#include "avr/type_traits.hpp"
-
-/**
- * @file
- * @brief The integer type library
- *
- * @since 1.0.0
- */
+#include <cstdint>
+#include <type_traits>
 
 namespace avr
   {
 
-  /**
-   * @brief A template to determine the exact int type to represent the given size
-   *
-   * This template provides integer types that match the given size exactly. If
-   * a given size can be represented exaclty, it provides a member type called
-   * @p type that is an alias for the repective integer type.
-   *
-   * @tparam Size The desired size of the type
-   *
-   * @see #avr::uint_for_size For the equivalent helper for unsigned types
-   *
-   * @since 1.0.0
-   */
   template<int Size>
   struct int_for_size;
 
-  /**
-   * @brief Specialization of avr::int_for_size for 8 bit integers
-   *
-   * @since 1.0.0
-   */
   template<>
   struct int_for_size<8>
     {
-    /**
-     * The actual integer type
-     */
-    using type = int8_t;
+    using type = std::int8_t;
     };
 
-  /**
-   * @brief Specialization of avr::int_for_size for 16 bit integers
-   *
-   * @since 1.0.0
-   */
   template<>
   struct int_for_size<16>
     {
-    /**
-     * The actual integer type
-     */
-    using type = int16_t;
+    using type = std::int16_t;
     };
 
-  /**
-   * @brief Specialization of avr::int_for_size for 32 bit integers
-   *
-   * @since 1.0.0
-   */
   template<>
   struct int_for_size<32>
     {
-    /**
-     * The actual integer type
-     */
-    using type = int32_t;
+    using type = std::int32_t;
     };
 
-  /**
-   * @brief Specialization of avr::int_for_size for 64 bit integers
-   *
-   * @since 1.0.0
-   */
   template<>
   struct int_for_size<64>
     {
-    /**
-     * The actual integer type
-     */
-    using type = int64_t;
+    using type = std::int64_t;
     };
 
-  /**
-   * @brief Convenience alias for the @p type member of avr::int_for_size
-   *
-   * @tparam Size The desired size of the type
-   *
-   * @since 1.0.0
-   */
   template<int Size>
   using int_for_size_t = typename int_for_size<Size>::type;
 
-  /**
-   * @brief A template to determine the exact unsigned int type to represent the given size
-   *
-   * This template provides unsigned integer types that match the given size exactly. If a given size can be represented
-   * exaclty, it provides a member type called @p type that is an alias for the repective integer type.
-   *
-   * @tparam Size The desired size of the type
-   *
-   * @see #avr::int_for_size For the equivalent helper for signed types
-   *
-   * @since 1.0.0
-   */
   template<int Size>
-  struct uint_for_size : make_unsigned<int_for_size_t<Size>> { };
+  struct uint_for_size : std::make_unsigned<int_for_size_t<Size>> { };
 
-  /**
-   * @brief Convenience alias for the @p type member of avr::uint_for_size
-   *
-   * @tparam Size The desired size of the type
-   *
-   * @since 1.0.0
-   */
   template<int Size>
   using uint_for_size_t = typename uint_for_size<Size>::type;
 

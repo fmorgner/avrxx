@@ -1,9 +1,10 @@
-// #include <avr/flash_constant.hpp>
-// #include <avr/cstdint.hpp>
+#include <avrxx/flash_constant.hpp>
 
-// auto const demo = avr::flash_constant{1};
+#include <cstdint>
+
+auto const demo = avr::flash_constant{1};
 
 int main()
   {
-  // return demo;
+  return demo;
   }

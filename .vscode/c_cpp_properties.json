@@ -4,9 +4,11 @@
             "cppStandard": "c++17",
             "cStandard": "c11",
             "intelliSenseMode": "gcc-x64",
-            "compilerPath": "/usr/bin/avr-gcc",
+            "compilerPath": "/usr/bin/avr-g++",
             "name": "AVR GCC",
-            "configurationProvider": "go2sh.cmake-integration"
+            "configurationProvider": "go2sh.cmake-integration",
+            "compileCommands": "${workspaceFolder}/build/compile_commands.json",
+            "defines": ["__cplusplus=20200101"]
         }
     ],
     "version": 4

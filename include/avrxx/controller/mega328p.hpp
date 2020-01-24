@@ -1,11 +1,13 @@
-#ifndef AVR_CONTROLLER_MEGA328P_HPP
-#define AVR_CONTROLLER_MEGA328P_HPP
+#ifndef AVRXX_CONTROLLER_MEGA328P_HPP
+#define AVRXX_CONTROLLER_MEGA328P_HPP
 
-#include "avr/register.hpp"
-#include "avr/type_traits.hpp"
-#include "avr/cstdint.hpp"
+#include "avrxx/register.hpp"
+#include "avrxx/meta.hpp"
 
 #include <avr/pgmspace.h>
+
+#include <cstdint>
+#include <type_traits>
 
 namespace avr
   {
@@ -40,28 +42,27 @@ namespace avr
     };
 
     template<>
-    inline auto mega328p::read_program_memory<avr::int8_t>(avr::int8_t const * address) { return pgm_read_byte_near(address); }
+    inline auto mega328p::read_program_memory<std::int8_t>(std::int8_t const * address) { return pgm_read_byte_near(address); }
 
     template<>
-    inline auto mega328p::read_program_memory<avr::uint8_t>(avr::uint8_t const * address) { return pgm_read_byte_near(address); }
+    inline auto mega328p::read_program_memory<std::uint8_t>(std::uint8_t const * address) { return pgm_read_byte_near(address); }
 
     template<>
-    inline auto mega328p::read_program_memory<avr::int16_t>(avr::int16_t const * address) { return pgm_read_word_near(address); }
+    inline auto mega328p::read_program_memory<std::int16_t>(std::int16_t const * address) { return pgm_read_word_near(address); }
 
     template<>
-    inline auto mega328p::read_program_memory<avr::uint16_t>(avr::uint16_t const * address) { return pgm_read_word_near(address); }
+    inline auto mega328p::read_program_memory<std::uint16_t>(std::uint16_t const * address) { return pgm_read_word_near(address); }
 
     template<>
-    inline auto mega328p::read_program_memory<avr::int32_t>(avr::int32_t const * address) { return pgm_read_dword_near(address); }
+    inline auto mega328p::read_program_memory<std::int32_t>(std::int32_t const * address) { return pgm_read_dword_near(address); }
 
     template<>
-    inline auto mega328p::read_program_memory<avr::uint32_t>(avr::uint32_t const * address) { return pgm_read_dword_near(address); }
+    inline auto mega328p::read_program_memory<std::uint32_t>(std::uint32_t const * address) { return pgm_read_dword_near(address); }
 
     template<>
     inline auto mega328p::read_program_memory<float>(float const * address) { return pgm_read_float_near(address); }
 
+    using mcu = ::avr::mega328p;
   }
-
-namespace avr { using mcu = ::avr::mega328p; }
 
 #endif

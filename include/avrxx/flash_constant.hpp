@@ -1,8 +1,9 @@
-#ifndef AVR_FLASH_COSNSTANT_HPP
-#define AVR_FLASH_COSNSTANT_HPP
+#ifndef AVRXX_FLASH_CONSTANT_HPP
+#define AVRXX_FLASH_CONSTANT_HPP
 
-#include "avr/cstdint.hpp"
-#include "avr/controller.hpp"
+#include "avrxx/controller.hpp"
+
+#include <cstdint>
 
 namespace avr
   {

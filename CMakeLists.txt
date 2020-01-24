@@ -16,13 +16,6 @@ if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE "Release")
 endif()
 
-# === C++ Base Configuration === #
-
-set(CMAKE_CXX_STANDARD "17")
-set(CMAKE_CXX_EXTENSIONS OFF)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_INTERPROCEDURAL_OPTIMIZATION ON)
-
 # === Core Library === #
 
 add_library("avrxx" INTERFACE)
@@ -37,9 +30,44 @@ target_include_directories("avrxx" SYSTEM INTERFACE
   "$<INSTALL_INTERFACE:include/stl>"
 )
 
+target_compile_features("avrxx" INTERFACE
+  "cxx_std_17"
+
+  "cxx_binary_literals"
+  "cxx_constexpr"
+  "cxx_contextual_conversions"
+  "cxx_decltype"
+  "cxx_deleted_functions"
+  "cxx_digit_separators"
+  "cxx_explicit_conversions"
+  "cxx_generic_lambdas"
+  "cxx_inheriting_constructors"
+  "cxx_inline_namespaces"
+  "cxx_lambdas"
+  "cxx_lambda_init_captures"
+  "cxx_noexcept"
+  "cxx_nonstatic_member_init"
+  "cxx_nullptr"
+  "cxx_relaxed_constexpr"
+  "cxx_reference_qualified_functions"
+  "cxx_right_angle_brackets"
+  "cxx_rvalue_references"
+  "cxx_static_assert"
+  "cxx_strong_enums"
+  "cxx_trailing_return_types"
+  "cxx_uniform_initialization"
+  "cxx_user_literals"
+  "cxx_variable_templates"
+  "cxx_variadic_templates"
+  "cxx_template_template_parameters"
+)
+
 # === Example Firmwares === #
 
 include("AddFirmware")
+
+set(OLD_CMAKE_CXX_EXTENSIONS ${CMAKE_CXX_EXTENSIONS})
+set(CMAKE_CXX_EXTENSIONS OFF)
 
 add_firmware("basic_ports" HEX
   CLOCK "16000000"
@@ -62,9 +90,11 @@ add_firmware("progmem" HEX
   "src/examples/progmem.cpp"
 )
 
-target_compile_options("basic_ports" PRIVATE
+target_compile_options("progmem" PRIVATE
   "-Wall"
   "-Wextra"
   "-Werror"
   "-pedantic-errors"
 )
+
+set(CMAKE_CXX_EXTENSIONS ${OLD_CMAKE_CXX_EXTENSIONS})

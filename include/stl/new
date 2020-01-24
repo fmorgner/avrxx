@@ -1,8 +1,9 @@
-#ifndef AVR_NEW_HPP
-#define AVR_NEW_HPP
+#ifndef AVRXX_STL_NEW
+#define AVRXX_STL_NEW
 
-#include "avr/cstddef.hpp"
 #include <stdlib.h>
+
+#include <cstddef>
 
 void * operator new(avr::size_t size)
   {

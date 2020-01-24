@@ -1,12 +1,12 @@
 #ifndef AVRXX_CONTROLLER_BASE_HPP
 #define AVRXX_CONTROLLER_BASE_HPP
 
-#include "avr/cstdint.hpp"
+#include <cstdint>
 
 namespace avr
   {
 
-  enum struct pin : avr::uint8_t
+  enum struct pin : std::uint8_t
     {
     zero,
     one,
