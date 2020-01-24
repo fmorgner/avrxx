@@ -1,5 +1,3 @@
-# vim: ft=cmake ts=2 sw=2 et
-
 if(NOT AVR_GCC)
   set(CROSS_GCC_PREFIX "avr-")
   find_program(CMAKE_CXX_COMPILER "${CROSS_GCC_PREFIX}g++" DOC "Path to ${CROSS_GCC_PREFIX}g++")
@@ -16,38 +14,3 @@ if(NOT AVR_GCC)
   set(CMAKE_SYSTEM_NAME "Generic")
   set(CMAKE_SYSTEM_PROCESSOR "avr")
 endif()
-
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
-set(AVR_HEX_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/hex")
-
-if(NOT AVRXX_MCU)
-  set(AVRXX_MCU "atmega328p" CACHE STRING "Target MCU type")
-endif()
-
-if(NOT AVRXX_CLOCK)
-  set(AVRXX_CLOCK "16000000" CACHE STRING "Target MCU clock frequency")
-endif()
-
-function(add_firmware TARGET)
-  set(OPTIONS HEX)
-  set(SINGLE_VALUE_ARGUMENTS MCU CLOCK_FREQUENCY)
-  set(MULTI_VALUE_ARGUMENTS SOURCES)
-  cmake_parse_arguments(ADD_FIRMWARE
-    "${OPTIONS}"
-    "${SINGLE_VALUE_ARGUMENTS}"
-    "${MULTI_VALUE_ARGUMENTS}"
-    ${ARGN}
-    )
-
-  file(MAKE_DIRECTORY ${AVR_HEX_OUTPUT_DIRECTORY})
-
-  add_executable(${TARGET} ${ADD_FIRMWARE_SOURCES})
-  target_link_libraries(${TARGET} "avrxx")
-  add_custom_command(TARGET ${TARGET}
-    POST_BUILD
-    COMMAND ${CMAKE_OBJCOPY} -j .text -j .data -O ihex $<TARGET_FILE:${TARGET}> "${AVR_HEX_OUTPUT_DIRECTORY}/${TARGET}.hex"
-    )
-  add_custom_target(${TARGET}_disassemble
-    COMMAND ${CMAKE_OBJDUMP} -d $<TARGET_FILE:${TARGET}>
-    )
-endfunction()

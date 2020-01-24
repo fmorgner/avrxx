@@ -1,0 +1,13 @@
+{
+    "configurations": [
+        {
+            "cppStandard": "c++17",
+            "cStandard": "c11",
+            "intelliSenseMode": "gcc-x64",
+            "compilerPath": "/usr/bin/avr-gcc",
+            "name": "AVR GCC",
+            "configurationProvider": "go2sh.cmake-integration"
+        }
+    ],
+    "version": 4
+}

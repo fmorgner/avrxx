@@ -16,9 +16,6 @@
 namespace avr
   {
 
-  enum struct bit : avr::uint8_t { zero, one, two, three, four, five, six, seven };
-  enum struct pin : avr::uint8_t { zero, one, two, three, four, five, six, seven };
-
   /**
    * @brief A safe wrapper for AVR <b>Special Function Registers</b>
    *
@@ -28,21 +25,20 @@ namespace avr
    * bounds will cause compilation to fail.
    *
    * @tparam Address The register's address in memory
-   * @tparam Base The address base of the register
    * @tparam Bits The register's size in Bits
    * @tparam ValidBits The available bits in the register
-   * @tparam EffectiveAddress The actual address of the register in memory space
    *
    * @since 1.0.0
    */
   template<avr::ptrdiff_t Address,
            avr::uint8_t Bits,
-           avr::uint_for_size_t<Bits> ValidBits,
-           typename BitAccessType = avr::uint8_t>
+           avr::uint_for_size_t<Bits> ValidBits>
   class special_function_register
     {
-    static_assert(avr::in_range(Address, 0x20, 0xff),
-                  "Address is not in Special Function Register range [0x20, 0xff]");
+    static_assert(
+      avr::in_range(Address, 0x20, 0xff),
+      "Address is not in Special Function Register range [0x20, 0xff]"
+    );
 
     special_function_register() = delete;
     special_function_register(special_function_register const &) = delete;
@@ -73,12 +69,6 @@ namespace avr
 
       /**
        * @internal
-       * The type used to access individual bits of this register
-       */
-      using bit_access_type = BitAccessType;
-
-      /**
-       * @internal
        * @brief Retrieve a referene to the underlying memory location
        */
       static decltype(auto) reg() { return (*reinterpret_cast<value_type volatile *>(address)); };
@@ -98,14 +88,23 @@ namespace avr
        *
        * @see avr::rw_special_function_register::set
        */
-      static auto get() { return reg(); }
+      static avr::uint_for_size_t<bits> get()
+      {
+        return reg();
+      }
 
-      static auto get_bit_unsafe(bit_access_type const bit) { return !!(reg() & (1 << static_cast<decltype(valid_bits)>(bit))); }
+      /**
+       * @brief Get the value of the specified bit
+       * 
+       * @note This function does not perform any compile-time checks as to whether or not the
+       * bit index is actually valid for this register
+       */
+      static bool get_bit_unsafe(avr::uint8_t const bit) { return !!(reg() & (1 << bit)); }
 
-      template<bit_access_type Bit>
+      template<avr::uint8_t Bit>
       static auto get_bit()
         {
-        static_assert(valid_bits & (1 << static_cast<decltype(valid_bits)>(Bit)), "Bit index is invalid!");
+        static_assert(valid_bits & (1 << Bit), "Bit index is invalid!");
         return get_bit_unsafe(Bit);
         }
     };
@@ -126,15 +125,13 @@ namespace avr
    */
   template<avr::ptrdiff_t Address,
            avr::uint8_t Bits,
-           avr::uint_for_size_t<Bits> ValidBits,
-           typename BitAccessType = avr::uint8_t>
-  class rw_special_function_register : public special_function_register<Address, Bits, ValidBits, BitAccessType>
+           avr::uint_for_size_t<Bits> ValidBits>
+  class rw_special_function_register : public special_function_register<Address, Bits, ValidBits>
     {
     protected:
-      using special_function_register<Address, Bits, ValidBits, BitAccessType>::reg;
-      using special_function_register<Address, Bits, ValidBits, BitAccessType>::valid_bits;
-      using typename special_function_register<Address, Bits, ValidBits, BitAccessType>::value_type;
-      using typename special_function_register<Address, Bits, ValidBits, BitAccessType>::bit_access_type;
+      using special_function_register<Address, Bits, ValidBits>::reg;
+      using special_function_register<Address, Bits, ValidBits>::valid_bits;
+      using typename special_function_register<Address, Bits, ValidBits>::value_type;
 
     public:
       /**
@@ -147,12 +144,12 @@ namespace avr
        */
       static auto set(value_type const value) { reg() = value; }
 
-      static auto set_bit_unsafe(bit_access_type const bit) { reg() |= 1 << static_cast<decltype(valid_bits)>(bit); }
+      static auto set_bit_unsafe(avr::uint8_t bit) { reg() |= 1 << bit; }
 
-      template<bit_access_type Bit>
+      template<uint8_t Bit>
       static auto set_bit()
         {
-        static_assert(valid_bits & (1 << static_cast<decltype(valid_bits)>(Bit)), "Bit index is invalid!");
+        static_assert(valid_bits & (1 << Bit), "Bit index is invalid!");
         set_bit_unsafe(Bit);
         }
     };
@@ -173,9 +170,8 @@ namespace avr
    */
   template<avr::ptrdiff_t Address,
            avr::uint_for_size_t<8> Bits,
-           avr::uint_for_size_t<Bits> ValidBits,
-           typename BitAccessType>
-  using ro_special_function_register = special_function_register<Address, Bits, ValidBits, BitAccessType>;
+           avr::uint_for_size_t<Bits> ValidBits>
+  using ro_special_function_register = special_function_register<Address, Bits, ValidBits>;
 
   /**
    * @brief A safe register wrapper to access the I/O registers of an AVR microcontroller
@@ -191,9 +187,8 @@ namespace avr
    */
   template<avr::ptrdiff_t Address,
            avr::uint8_t Bits,
-           avr::uint_for_size_t<Bits> ValidBits,
-           typename BitAccessType>
-  using rw_io_register = rw_special_function_register<Address, Bits, ValidBits, BitAccessType>;
+           avr::uint_for_size_t<Bits> ValidBits>
+  using rw_io_register = rw_special_function_register<Address, Bits, ValidBits>;
 
   /**
    * @brief A safe register wrapper to access the I/O registers of an AVR microcontroller
@@ -209,9 +204,8 @@ namespace avr
    */
   template<avr::ptrdiff_t Address,
            avr::uint8_t Bits,
-           avr::uint_for_size_t<Bits> ValidBits,
-           typename BitAccessType>
-  using ro_io_register = ro_special_function_register<Address, Bits, ValidBits, BitAccessType>;
+           avr::uint_for_size_t<Bits> ValidBits>
+  using ro_io_register = ro_special_function_register<Address, Bits, ValidBits>;
 
   /**
    * @brief A safe wrapper for PINx registers of an AVR microcontroller
@@ -228,12 +222,12 @@ namespace avr
            avr::uint8_t ValidPins>
   struct pin_register
     {
-    using base_type = ro_io_register<Address, 8, ValidPins, avr::pin>;
+    using base_type = ro_io_register<Address, 8, ValidPins>;
 
     static auto get() { return base_type::get(); }
-    static auto get_unsafe(pin const pin) { return base_type::get_bit_unsafe(pin); }
-    template<avr::pin Pin>
-    static auto get() { return base_type::template get_bit<Pin>(); }
+    static auto get_pin_unsafe(avr::uint8_t pin) { return base_type::get_bit_unsafe(pin); }
+    template<avr::uint8_t Pin>
+    static auto get_pin() { return base_type::template get_bit<Pin>(); }
     };
 
   /**
@@ -248,7 +242,25 @@ namespace avr
    * @since 1.0.0
    */
   template<avr::ptrdiff_t Address, avr::uint_for_size_t<8> ValidBits>
-  using ddr_register = rw_io_register<Address, 8, ValidBits, avr::bit>;
+  struct ddr_register
+    {
+    using base_type = rw_io_register<Address, 8, ValidBits>;
+
+    enum struct direction : bool
+      {
+      in,
+      out
+      };
+
+    static auto get() { return base_type::get(); }
+    static auto get_direction_unsafe(avr::uint8_t bit) { return direction{base_type::get_bit_unsafe(bit)}; }
+    template<avr::uint8_t Bit>
+    static auto get_direction() { return direction{base_type::template get_bit<Bit>()}; }
+
+    static auto set(decltype(ValidBits) value) { base_type::set(value); }
+    static auto set_direction_unsafe(direction direction) { base_type::set_bit_unsafe()}
+    //static auto set_direction_unsafe(avr::uint8_t bit, direction direction) { base_type::set_bit_unsafe(
+    };
 
   /**
    * @brief A safe wrapper for PORTx registers of an AVR microcontroller
@@ -262,7 +274,7 @@ namespace avr
    * @since 1.0.0
    */
   template<avr::ptrdiff_t Address, avr::uint_for_size_t<8> ValidBits>
-  using port_register = rw_io_register<Address, 8, ValidBits, avr::bit>;
+  using port_register = rw_io_register<Address, 8, ValidBits>;
   }
 
 #endif

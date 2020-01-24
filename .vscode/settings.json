@@ -1,3 +1,6 @@
 {
-    "C_Cpp.default.configurationProvider": "vector-of-bool.cmake-tools"
+    "files.associations": {
+        "**/stl/*": "cpp"
+    },
+    "cmake.cpptools.guessSourceFileConfigurations": "true"
 }
