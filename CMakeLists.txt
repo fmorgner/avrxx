@@ -66,9 +66,6 @@ target_compile_features("avrxx" INTERFACE
 
 include("AddFirmware")
 
-set(OLD_CMAKE_CXX_EXTENSIONS ${CMAKE_CXX_EXTENSIONS})
-set(CMAKE_CXX_EXTENSIONS OFF)
-
 add_firmware("basic_ports" HEX
   CLOCK "16000000"
   MCU "atmega328p"
@@ -81,6 +78,11 @@ target_compile_options("basic_ports" PRIVATE
   "-Wextra"
   "-Werror"
   "-pedantic-errors"
+)
+
+set_target_properties("basic_ports" PROPERTIES
+  INTERPROCEDURAL_OPTIMIZATION ON
+  CXX_EXTENSIONS OFF
 )
 
 add_firmware("progmem" HEX
@@ -97,4 +99,7 @@ target_compile_options("progmem" PRIVATE
   "-pedantic-errors"
 )
 
-set(CMAKE_CXX_EXTENSIONS ${OLD_CMAKE_CXX_EXTENSIONS})
+set_target_properties("progmem" PROPERTIES
+  INTERPROCEDURAL_OPTIMIZATION ON
+  CXX_EXTENSIONS OFF
+)
