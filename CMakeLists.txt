@@ -18,19 +18,19 @@ endif()
 
 # === Core Library === #
 
-add_library("avrxx" INTERFACE)
+add_library("${PROJECT_NAME}" INTERFACE)
 
-target_include_directories("avrxx" INTERFACE
+target_include_directories("${PROJECT_NAME}" INTERFACE
   "$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>"
   "$<INSTALL_INTERFACE:include>"
 )
 
-target_include_directories("avrxx" SYSTEM INTERFACE
+target_include_directories("${PROJECT_NAME}" SYSTEM INTERFACE
   "$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/avrstl>"
   "$<INSTALL_INTERFACE:include/avrstl>"
 )
 
-target_compile_features("avrxx" INTERFACE
+target_compile_features("${PROJECT_NAME}" INTERFACE
   "cxx_std_17"
 
   "cxx_binary_literals"
@@ -102,4 +102,38 @@ target_compile_options("progmem" PRIVATE
 set_target_properties("progmem" PROPERTIES
   INTERPROCEDURAL_OPTIMIZATION ON
   CXX_EXTENSIONS OFF
+)
+
+# === Install Configuration === #
+
+include("CMakePackageConfigHelpers")
+
+write_basic_package_version_file(                                                                                                   
+    "${PROJECT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
+    COMPATIBILITY "AnyNewerVersion"
+)
+
+install(TARGETS "${PROJECT_NAME}"
+  EXPORT "${PROJECT_NAME}Targets"
+  PUBLIC_HEADER DESTINATION "include"
+)
+
+install(DIRECTORY "${PROJECT_SOURCE_DIR}/include/"
+  DESTINATION "include"
+)
+
+configure_package_config_file("${PROJECT_SOURCE_DIR}/cmake/config.cmake.in"
+  "${PROJECT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
+  INSTALL_DESTINATION "lib/cmake/${PROJECT_NAME}"
+)
+
+install(FILES
+  "${PROJECT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
+  "${PROJECT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
+  "${PROJECT_SOURCE_DIR}/cmake/Modules/AddFirmware.cmake"
+  DESTINATION "lib/cmake/${PROJECT_NAME}"
+)
+
+install(EXPORT "${PROJECT_NAME}Targets"
+  DESTINATION "lib/cmake/${PROJECT_NAME}"
 )
