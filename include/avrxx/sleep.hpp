@@ -4,10 +4,10 @@
 #include <avr/sleep.h>
 
 namespace avr
-  {
+{
 
   enum struct mode : uint8_t
-    {
+  {
 #ifdef SLEEP_MODE_IDLE
     idle = SLEEP_MODE_IDLE,
 #else
@@ -44,72 +44,96 @@ namespace avr
 #else
     extended_standby,
 #endif
-    };
+  };
 
   template<mode Mode>
   void select()
+  {
+    if constexpr (Mode == mode::idle)
     {
-    if constexpr(Mode == mode::idle)
-      {
 #ifndef SLEEP_MODE_IDLE
 #error "Idle sleep is not supported by the device"
 #endif
-      }
-    else if constexpr(Mode == mode::adc_noise_reduction)
-      {
+    }
+    else if constexpr (Mode == mode::adc_noise_reduction)
+    {
 #ifndef SLEEP_MODE_ADC
 #error "ADC Noise Reduction sleep is not supported by the device"
 #endif
-      }
-    if constexpr(Mode == mode::power_down)
-      {
+    }
+    if constexpr (Mode == mode::power_down)
+    {
 #ifndef SLEEP_MODE_PWR_DOWN
 #error "Power Down sleep is not supported by the device"
 #endif
-      }
-    else if constexpr(Mode == mode::power_save)
-      {
+    }
+    else if constexpr (Mode == mode::power_save)
+    {
 #ifndef SLEEP_MODE_PWR_SAVE
 #error "Power Save sleep is not supported by the device"
 #endif
-      }
-    else if constexpr(Mode == mode::standby)
-      {
+    }
+    else if constexpr (Mode == mode::standby)
+    {
 #ifndef SLEEP_MODE_STANDBY
 #error "Standby sleep is not supported by the device"
 #endif
-      }
-    else if constexpr(Mode == mode::extended_standby)
-      {
+    }
+    else if constexpr (Mode == mode::extended_standby)
+    {
 #ifndef SLEEP_MODE_EXT_STANDBY
 #error "Extended Standby sleep is not supported by the device"
 #endif
-      }
-
-    set_sleep_mode(static_cast<int>(Mode)); return;
     }
 
+    set_sleep_mode(static_cast<int>(Mode));
+    return;
+  }
+
   inline void disable_brownout_detector()
-    {
+  {
 #ifdef sleep_bod_disable
     sleep_bod_disable();
 #else
 #error "Disabling Brown-out Detection is not supported by the device"
 #endif
-    }
-
-  inline void enter() { sleep_mode(); }
-
-  template<mode Mode> void select_enter() { select<Mode>(); enter(); }
-
-  inline void enable() { sleep_enable(); }
-
-  template<mode Mode> void select_enable() { select<Mode>(); enable(); }
-
-  inline void disable() { sleep_disable(); }
-
-  inline void sleep() { sleep_cpu(); disable(); }
-
   }
+
+  inline void enter()
+  {
+    sleep_mode();
+  }
+
+  template<mode Mode>
+  void select_enter()
+  {
+    select<Mode>();
+    enter();
+  }
+
+  inline void enable()
+  {
+    sleep_enable();
+  }
+
+  template<mode Mode>
+  void select_enable()
+  {
+    select<Mode>();
+    enable();
+  }
+
+  inline void disable()
+  {
+    sleep_disable();
+  }
+
+  inline void sleep()
+  {
+    sleep_cpu();
+    disable();
+  }
+
+}  // namespace avr
 
 #endif

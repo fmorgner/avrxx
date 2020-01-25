@@ -1,6 +1,27 @@
 {
+    // Visual Studio Code Base
     "files.associations": {
-        "**/stl/*": "cpp"
+        "**/avrstl/*": "cpp",
+        ".clang-format": "yaml"
     },
-    "cmake.cpptools.guessSourceFileConfigurations": "true"
+    "[cpp]" : {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "xaver.clang-format",
+        "editor.wordWrapColumn": 128,
+    },
+
+    // CMake Integration
+    "cmake.cpptools.guessSourceFileConfigurations": true,
+    "cmake.cpptools.compilerPath": "/usr/bin/avr-g++",
+    "cmake.cpptools.intelliSenseMode": "gcc-x64",
+    "cmake.configureArguments": "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON",
+    "cmake.default.generator": "Unix Makefiles",
+    "cmake.default.buildDirectory": "${workspaceFolder}/build",
+    "cmake.reconfigureOnChange": true,
+
+    // clang-format
+    "clang-format.style": "file",
+
+    // Microsoft C/C++ Tools
+    "C_Cpp.autoAddFileAssociations": false,
 }
