@@ -78,6 +78,23 @@ namespace avr
       static_assert(valid_bits & (1 << Bit), "Bit index is invalid!");
       set_bit_unsafe(Bit);
     }
+
+    static auto clear()
+    {
+      reg() = 0;
+    }
+
+    static auto clear_bit_unsafe(std::uint8_t bit)
+    {
+      reg() &= ~(1 << bit);
+    }
+
+    template<uint8_t Bit>
+    static auto clear_bit()
+    {
+      static_assert(valid_bits & (1 << Bit), "Bit index is invalid!");
+      clear_bit_unsafe(Bit);
+    }
   };
 
   template<std::ptrdiff_t Address, avr::uint_for_size_t<8> Bits, avr::uint_for_size_t<Bits> ValidBits>
@@ -138,9 +155,17 @@ namespace avr
     {
       base_type::set(value);
     }
-    static auto set_direction_unsafe(direction direction)
+
+    static auto set_direction_unsafe(std::uint8_t bit, direction direction)
     {
-      base_type::set_bit_unsafe();
+      if (direction == direction::out)
+      {
+        base_type::set_bit_unsafe(bit);
+      }
+      else
+      {
+        base_type::clear_bit_usafe(bit);
+      }
     }
   };
 

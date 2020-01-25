@@ -1,6 +1,6 @@
 #include <avrxx/controller.hpp>
 
-int main()
+auto main() -> int
 {
   if (avr::mcu::pinc::get_pin<3>())
   {

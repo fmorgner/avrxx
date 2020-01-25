@@ -4,10 +4,10 @@
 #include <cstdint>
 
 namespace avr
-  {
+{
 
   enum struct pin : std::uint8_t
-    {
+  {
     zero,
     one,
     two,
@@ -16,8 +16,8 @@ namespace avr
     five,
     six,
     seven
-    };
+  };
 
-  }
+}
 
 #endif

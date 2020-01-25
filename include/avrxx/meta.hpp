@@ -13,7 +13,8 @@ namespace avr
   }
 
   template<typename...>
-  using deferred_failure = std::false_type;
+  struct deferred_failure : std::false_type
+  {};
 
 }  // namespace avr
 

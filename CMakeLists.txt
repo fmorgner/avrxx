@@ -16,6 +16,32 @@ if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE "Release")
 endif()
 
+# === Linter Configuration === #
+
+find_program(CLANG_TIDY_EXE clang-tidy)
+if(CLANG_TIDY_EXE)
+  set(CMAKE_CXX_CLANG_TIDY "${CLANG_TIDY_EXE}"
+    "--format-style=file"
+    "--extra-arg-before=-D__AVR_DEVICE_NAME__"
+    "--extra-arg-before=-D__AVR_ATmega328P__"
+    "--extra-arg-before=--target=avr"
+    "--extra-arg-before=-mmcu=atmega328p"
+    "--extra-arg-before=-nostdinc"
+    "--extra-arg-before=-isystem/usr/avr/include"
+    "--extra-arg-before=-isystem/usr/lib/gcc/avr/9.2.0/include"
+    "--extra-arg=-isystem${PROJECT_SOURCE_DIR}include/avrstl"
+    "--extra-arg=-I${PROJECT_SOURCE_DIR}include/avrxx"
+    "--system-headers"
+    "-p=${PROJECT_BINARY_DIR}"
+
+    # Enable checks
+    "-checks=-*,modernize-*"
+
+    # Disable certain corner cases
+    "--extra-arg=-Wno-unknown-attributes"
+  )
+endif()
+
 # === Core Library === #
 
 add_library("${PROJECT_NAME}" INTERFACE)
@@ -103,6 +129,8 @@ set_target_properties("progmem" PROPERTIES
   INTERPROCEDURAL_OPTIMIZATION ON
   CXX_EXTENSIONS OFF
 )
+
+unset(CMAKE_CXX_CLANG_TIDY)
 
 # === Install Configuration === #
 
