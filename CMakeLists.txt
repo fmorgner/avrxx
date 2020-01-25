@@ -26,8 +26,8 @@ target_include_directories("avrxx" INTERFACE
 )
 
 target_include_directories("avrxx" SYSTEM INTERFACE
-  "$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/stl>"
-  "$<INSTALL_INTERFACE:include/stl>"
+  "$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/avrstl>"
+  "$<INSTALL_INTERFACE:include/avrstl>"
 )
 
 target_compile_features("avrxx" INTERFACE
