@@ -88,6 +88,52 @@ target_compile_features("${PROJECT_NAME}" INTERFACE
   "cxx_template_template_parameters"
 )
 
+# === Documentation === #
+
+option(BUILD_DOCS "Build the library documentation" OFF)
+
+if(BUILD_DOCS)
+  find_program(PIPENV_EXE NAMES "pipenv3" "pipenv")
+  mark_as_advanced(PIPENV_EXE)
+
+  if(NOT PIPENV_EXE)
+    message(FATAL_ERROR "'pipenv' is required to build the documentation")
+  endif()
+
+  execute_process(COMMAND "${PIPENV_EXE}" "install"
+    WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}/doc"
+    OUTPUT_QUIET
+  )
+
+  set(DOC_SOURCES
+    "${PROJECT_SOURCE_DIR}/doc/src/index.rst"
+    "${PROJECT_SOURCE_DIR}/doc/src/conf.py"
+  )
+
+  add_custom_target("${PROJECT_NAME}_docs"
+    DEPENDS
+    "${PROJECT_BINARY_DIR}/doc/html/index.html"
+    "${PROJECT_BINARY_DIR}/doc/man/${PROJECT_NAME}.3"
+    COMMENT "Building documentation"
+  )
+
+  add_custom_command(OUTPUT "${PROJECT_BINARY_DIR}/doc/html/index.html"
+    COMMAND "${PIPENV_EXE}" "run" "sphinx-build" "-b" "singlehtml" "${PROJECT_SOURCE_DIR}/doc/src" "${PROJECT_BINARY_DIR}/doc/html"
+    DEPENDS ${DOC_SOURCES}
+    WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}/doc"
+    COMMENT "Compiling HTML documentation"
+  )
+
+  add_custom_command(OUTPUT "${PROJECT_BINARY_DIR}/doc/man/${PROJECT_NAME}.3"
+    COMMAND "${PIPENV_EXE}" "run" "sphinx-build" "-b" "man" "${PROJECT_SOURCE_DIR}/doc/src" "${PROJECT_BINARY_DIR}/doc/man"
+    DEPENDS ${DOC_SOURCES}
+    WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}/doc"
+    COMMENT "Compiling man pages"
+  )
+
+  add_dependencies("${PROJECT_NAME}" "${PROJECT_NAME}_docs")
+endif()
+
 # === Example Firmwares === #
 
 include("AddFirmware")
